@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("HeatOptimisation")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9654ee8d7d7e0fada1154759845ccc3389e52d1c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a4a1a1056d1a0d1ec751f1a0814792f16764abca")]
 [assembly: System.Reflection.AssemblyProductAttribute("HeatOptimisation")]
 [assembly: System.Reflection.AssemblyTitleAttribute("HeatOptimisation")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
