@@ -1,5 +1,8 @@
 ﻿using Avalonia;
+using SP2.Services;
 using System;
+using System.Diagnostics;
+using System.Reflection;
 
 namespace SP2;
 
@@ -11,6 +14,7 @@ class Program
     [STAThread]
     public static void Main(string[] args) => BuildAvaloniaApp()
         .StartWithClassicDesktopLifetime(args);
+    
 
     // Avalonia configuration, don't remove; also used by visual designer.
     public static AppBuilder BuildAvaloniaApp()
