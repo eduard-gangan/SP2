@@ -5,13 +5,19 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Google.Protobuf.WellKnownTypes;
 using SP2.Models;
 
 namespace SP2.Services
 {
     public static class AssetManager
     {
-        
+        private static readonly HeatGrid HeatGrid = new HeatGrid
+        {
+            Name = "Heatington",
+            Image = "Assets/HeatGrid.png"
+        };
+
         private static readonly List<ProductionUnit> _productionUnits = new List<ProductionUnit>
             {
             new ProductionUnit("Gas Boiler 1", "Assets/GasBoiler.png", 4.0, null, 520.0, 175.0, 0.9, "Gas"),
@@ -29,6 +35,9 @@ namespace SP2.Services
         {
             return _productionUnits.FirstOrDefault(x => x.Name == name);
         }
-
+        public static HeatGrid GetHeatGrid()
+        {
+            return HeatGrid;
+        }
     }
 }
