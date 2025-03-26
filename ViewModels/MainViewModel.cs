@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using SP2.Services;
+using SP2.Tests;
 
 namespace SP2.ViewModels
 {

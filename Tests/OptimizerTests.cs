@@ -2,7 +2,7 @@ using System;
 using SP2.Models;
 using SP2.Services;
 
-namespace SP2.Services
+namespace SP2.Tests
 {
     public class OptimizerTests
     {

@@ -23,4 +23,13 @@
     <PackageReference Include="IronXL.Excel" Version="2025.3.1" />
 	<AvaloniaResource Include="Assets\**" />
   </ItemGroup>
+
+  <ItemGroup>
+    <AvaloniaResource Update="Assets\2025 Heat Production Optimization - Danfoss Deliveries - Source Data Manager.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Update="Assets\OilBoiler.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+  </ItemGroup>
 </Project>

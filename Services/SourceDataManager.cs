@@ -10,15 +10,10 @@ using CsvHelper.Configuration;
 using System.Globalization;
 
 
-namespace SP2.ViewModels
+namespace SP2.Services
 {
-    public class SourceDataManager
+    public static class SourceDataManager
     {
-        private static double winterHeatDemand;
-        private static double winterElectricityPrice;
-        private static double summerHeatDemand;
-        private static double summerElectricityPrice;
-
         public static List<TimeSeriesData> LoadData(string csvPath)
         {
             var records = new List<TimeSeriesData>();
@@ -38,18 +33,18 @@ namespace SP2.ViewModels
             {
                 if(DateTime.TryParse(csv.GetField(0), out var winterTimeFrom) &&
                     DateTime.TryParse(csv.GetField(1), out var winterTimeTo) &&
-                    double.TryParse(csv.GetField(2), out winterHeatDemand) &&
-                    double.TryParse(csv.GetField(3), out winterElectricityPrice))
+                    double.TryParse(csv.GetField(2), out var winterHeatDemand) &&
+                    double.TryParse(csv.GetField(3), out var winterElectricityPrice))
                 {
                     records.Add(new TimeSeriesData(winterTimeFrom, winterTimeTo, winterHeatDemand, winterElectricityPrice));
                 }
 
                 if (DateTime.TryParse(csv.GetField(5), out var summerTimeFrom) &&
                     DateTime.TryParse(csv.GetField(6), out var summerTimeTo) &&
-                    double.TryParse(csv.GetField(7), out summerHeatDemand) &&
-                    double.TryParse(csv.GetField(8), out summerElectricityPrice))
+                    double.TryParse(csv.GetField(7), out var summerHeatDemand) &&
+                    double.TryParse(csv.GetField(8), out var summerElectricityPrice))
                 {
-                    records.Add(new TimeSeriesData(summerTimeFrom, summerTimeTo, winterHeatDemand, winterElectricityPrice));
+                    records.Add(new TimeSeriesData(summerTimeFrom, summerTimeTo, summerHeatDemand, summerElectricityPrice));
                 }
 
             }
