@@ -52,10 +52,9 @@ namespace SP2.ViewModels
                     records.Add(new TimeSeriesData(summerTimeFrom, summerTimeTo, winterHeatDemand, winterElectricityPrice));
                 }
 
-                return records;
             }
-
             
+            return records;
         }
     }
 }
