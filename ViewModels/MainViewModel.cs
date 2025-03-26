@@ -8,6 +8,8 @@ namespace SP2.ViewModels
     {
         public MainViewModel()
         {
+            // Run the optimization tests when the program starts
+            OptimizerTests.RunTest();
         }
     }
 }
