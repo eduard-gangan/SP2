@@ -1,0 +1,49 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SP2.Views.Heat">
+   <Grid  
+        HorizontalAlignment="Left"
+    >
+         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="500"/>
+            <ColumnDefinition Width="500"/>
+        </Grid.ColumnDefinitions>
+        <Border
+            BorderBrush="#CBD5E1"
+            BorderThickness="1"
+            CornerRadius="12"
+            Padding="24"
+            Margin="28,0,28,28"
+            Grid.Column="0"
+        >
+            <Grid>
+                <TextBlock 
+                    Text="Heat Demand" 
+                    FontSize="28"
+                    FontWeight="Bold"
+                    Foreground="Black"
+                />
+            </Grid>
+        </Border>
+        <Border
+            BorderBrush="#CBD5E1"
+            BorderThickness="1"
+            CornerRadius="12"
+            Padding="24"
+            Margin="0,0,28,28"
+            Grid.Column="1"
+        >
+            <Grid>
+                <TextBlock 
+                    Text="Heat Production by Unit" 
+                    FontSize="28"
+                    FontWeight="Bold"
+                    Foreground="Black"
+                />
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

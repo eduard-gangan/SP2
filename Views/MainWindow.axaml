@@ -2,8 +2,73 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:SP2.ViewModels"
+        xmlns:views="using:SP2.Views"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SP2.MainWindow"
-        Title="SP2">
-    Welcome to Avalonia!
+        x:DataType="vm:MainWindowViewModel"
+        Title="Heat Production Optimization"
+        Background="#FFFFFF">
+
+    <Window.Styles>
+        <Style Selector="Button.NavButton">
+            <Setter Property="Height" Value="42"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Background" Value="#CBD5E1"/>
+            <Setter Property="Foreground" Value="#475569"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Margin" Value="4"/>
+            <Setter Property="Transitions">
+                <Transitions>
+                    <BrushTransition Property="Background" Duration="0:0:0.2"/>
+                    <BrushTransition Property="Foreground" Duration="0:0:0.2"/>
+                </Transitions>
+            </Setter>
+        </Style>
+        
+        <Style Selector="Button.NavButton:pointerover">
+            <Setter Property="Background" Value="#F1F5F9"/>
+            <Setter Property="Foreground" Value="#1E293B"/>
+        </Style>
+        
+        <Style Selector="Button.NavButton.active">
+            <Setter Property="Background" Value="#F1F5F9"/>
+            <Setter Property="Foreground" Value="#1E293B"/>
+        </Style>
+    </Window.Styles>
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+    
+    <Grid RowDefinitions="Auto,*">
+        <!-- Top Navbar -->
+        <Border Grid.Row="0" Background="#CBD5E1" CornerRadius="8" HorizontalAlignment="Left" Margin="28">
+            <StackPanel Orientation="Horizontal" Height="50">
+                <Button Content="System Configuration" 
+                        Command="{Binding NavigateToPage1Command}" 
+                        Classes="NavButton"
+                        Classes.active="{Binding IsPage1Active}"/>
+                
+                <Button Content="Heat Demand &amp; Production" 
+                        Command="{Binding NavigateToPage2Command}" 
+                        Classes="NavButton"
+                        Classes.active="{Binding IsPage2Active}"/>
+                
+                <Button Content="Electricity" 
+                        Command="{Binding NavigateToPage3Command}" 
+                        Classes="NavButton"
+                        Classes.active="{Binding IsPage3Active}"/>
+                
+                <Button Content="Economics &amp; Environmental" 
+                        Command="{Binding NavigateToPage4Command}" 
+                        Classes="NavButton"
+                        Classes.active="{Binding IsPage4Active}"/>
+            </StackPanel>
+        </Border>
+        
+        <!-- Content Area -->
+        <ContentControl Grid.Row="1" Content="{Binding CurrentPage}"/>
+    </Grid>
 </Window>
