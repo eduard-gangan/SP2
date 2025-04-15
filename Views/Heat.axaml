@@ -1,0 +1,91 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
+             xmlns:vm="using:SP2.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SP2.Views.Heat"
+             x:DataType="vm:HeatViewModel">
+   <Grid  
+        HorizontalAlignment="Left"
+        MinWidth="900"
+    >
+         <Grid.RowDefinitions>
+            <RowDefinition Height="356"/>
+            <RowDefinition Height="356"/>
+        </Grid.RowDefinitions>
+        <Border
+            BorderBrush="#CBD5E1"
+            BorderThickness="1"
+            CornerRadius="12"
+            Padding="24"
+            Margin="28,0,28,28"
+            Grid.Row="0"
+        >
+            <Grid RowDefinitions="Auto,*">
+                <TextBlock 
+                    Grid.Row="0"
+                    Text="Heat Demand" 
+                    FontSize="28"
+                    FontWeight="Bold"
+                    Foreground="Black"
+                    Margin="0,0,0,16"
+                />
+                
+                <!-- 
+                    Key Properties Explained:
+                    - Series: Collection of data series to display on the chart
+                    - XAxes/YAxes: Define the appearance and behavior of the axes
+                    - TooltipPosition: Controls where tooltips appear when hovering over data points
+                    - AnimationsSpeed: Duration of animations in milliseconds
+                -->
+                <lvc:CartesianChart
+                    Grid.Row="1"
+                    Series="{Binding HeatDemandSeries}"
+                    XAxes="{Binding HeatDemandXAxes}"
+                    YAxes="{Binding HeatDemandYAxes}"
+                    TooltipPosition="Top"
+                    AnimationsSpeed="00:00:00.500"
+                    Height="300">
+                </lvc:CartesianChart>
+            </Grid>
+        </Border>
+        <Border
+            BorderBrush="#CBD5E1"
+            BorderThickness="1"
+            CornerRadius="12"
+            Padding="24"
+            Margin="28,0,28,28"
+            Grid.Row="1"
+        >
+            <Grid RowDefinitions="Auto,*">
+                <TextBlock 
+                    Grid.Row="0"
+                    Text="Heat Production by Unit" 
+                    FontSize="28"
+                    FontWeight="Bold"
+                    Foreground="Black"
+                    Margin="0,0,0,16"
+                />
+                
+                <!-- 
+                    Key Properties Explained:
+                    - Series: Collection of data series to display on the chart
+                    - XAxes/YAxes: Define the appearance and behavior of the axes
+                    - TooltipPosition: Controls where tooltips appear when hovering over data points
+                    - AnimationsSpeed: Duration of animations in milliseconds
+                -->
+                <lvc:CartesianChart
+                    Grid.Row="1"
+                    Series="{Binding HeatProductionSeries}"
+                    XAxes="{Binding HeatProductionXAxes}"
+                    YAxes="{Binding HeatProductionYAxes}"
+                    TooltipPosition="Right"
+                    AnimationsSpeed="00:00:00.750"
+                    Height="300">
+                </lvc:CartesianChart>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>
