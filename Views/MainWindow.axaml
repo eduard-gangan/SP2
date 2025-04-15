@@ -5,6 +5,7 @@
         xmlns:vm="using:SP2.ViewModels"
         xmlns:views="using:SP2.Views"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        Width="1440" Height="832"
         x:Class="SP2.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Title="Heat Production Optimization"
