@@ -1,0 +1,798 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SP2.Views.SystemConfig">
+    <Grid  
+        HorizontalAlignment="Left"
+    >
+        <Border
+            BorderBrush="#CBD5E1"
+            BorderThickness="1"
+            CornerRadius="12"
+            Padding="24"
+            Margin="28,0,28,28"
+        >
+            <Grid>
+                <TextBlock 
+                    Text="Heat Production Units" 
+                    FontSize="28"
+                    FontWeight="Bold"
+                    Foreground="Black"
+                />
+                <Grid Margin="0,60,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="210"/>
+                        <RowDefinition Height="210"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="300"/>
+                        <ColumnDefinition Width="300"/>
+                        <ColumnDefinition Width="300"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <!-- Top Left -->
+                    <Border
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        BorderBrush="#CBD5E1"
+                        BorderThickness="1"
+                        CornerRadius="8"
+                        Margin="5"
+                        Padding="14">
+                        <StackPanel Orientation="Vertical">
+                            <Grid Margin="0,0,0,2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock 
+                                    Text="Gas Boiler 1" 
+                                    FontSize="18"
+                                    Foreground="#334155"
+                                    Margin="0,0,0,6"
+                                />
+                                <Border 
+                                    CornerRadius="100" 
+                                    HorizontalAlignment="Right"
+                                    Grid.Column="1"
+                                    Background="#6EE7B7"
+                                    Padding="4"
+                                    VerticalAlignment="Top">
+                                    <TextBlock 
+                                        Text="Gas Boiler" 
+                                        FontSize="10"
+                                        Foreground="#047857"
+                                    />
+                                </Border>
+                            </Grid>
+                            <Grid Margin="0,6,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock 
+                                    Grid.Column="0"
+                                    Text="Max Heat Production" 
+                                    FontSize="14"
+                                    Foreground="#64748B"
+                                />
+                                <TextBlock 
+                                    Grid.Column="1"
+                                    Text="10 MWh" 
+                                    FontSize="14"
+                                    Foreground="#1E293B"
+                                    HorizontalAlignment="Right"
+                                />
+                            </Grid>
+                            <Grid Margin="0,6,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock 
+                                    Grid.Column="0"
+                                    Text="Electricity Production" 
+                                    FontSize="14"
+                                    Foreground="#64748B"
+                                />
+                                <TextBlock 
+                                    Grid.Column="1"
+                                    Text="0 MWh" 
+                                    FontSize="14"
+                                    Foreground="#1E293B"
+                                    HorizontalAlignment="Right"
+                                />
+                            </Grid>
+                            <Grid Margin="0,6,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock 
+                                    Grid.Column="0"
+                                    Text="Electricity Consumption" 
+                                    FontSize="14"
+                                    Foreground="#64748B"
+                                />
+                                <TextBlock 
+                                    Grid.Column="1"
+                                    Text="0 MWh" 
+                                    FontSize="14"
+                                    Foreground="#1E293B"
+                                    HorizontalAlignment="Right"
+                                />
+                            </Grid>
+                            <Grid Margin="0,6,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock 
+                                    Grid.Column="0"
+                                    Text="Production Costs" 
+                                    FontSize="14"
+                                    Foreground="#64748B"
+                                />
+                                <TextBlock 
+                                    Grid.Column="1"
+                                    Text="45 €/MWh" 
+                                    FontSize="14"
+                                    Foreground="#1E293B"
+                                    HorizontalAlignment="Right"
+                                />
+                            </Grid>
+                            <Grid Margin="0,6,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock 
+                                    Grid.Column="0"
+                                    Text="Primary Energy" 
+                                    FontSize="14"
+                                    Foreground="#64748B"
+                                />
+                                <TextBlock 
+                                    Grid.Column="1"
+                                    Text="12 MWh" 
+                                    FontSize="14"
+                                    Foreground="#1E293B"
+                                    HorizontalAlignment="Right"
+                                />
+                            </Grid>
+                            <Grid Margin="0,6,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock 
+                                    Grid.Column="0"
+                                    Text="CO2 Emissions" 
+                                    FontSize="14"
+                                    Foreground="#64748B"
+                                />
+                                <TextBlock 
+                                    Grid.Column="1"
+                                    Text="1.5 t/MWh" 
+                                    FontSize="14"
+                                    Foreground="#1E293B"
+                                    HorizontalAlignment="Right"
+                                />
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                    
+                    <!-- Top Middle -->
+                    <Border
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        BorderBrush="#CBD5E1"
+                        BorderThickness="1"
+                        CornerRadius="8"
+                        Margin="5"
+                        Padding="14">
+                        <StackPanel Orientation="Vertical">
+                            <Grid Margin="0,0,0,2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock 
+                                    Text="Gas Boiler 2" 
+                                    FontSize="18"
+                                    Foreground="#334155"
+                                    Margin="0,0,0,6"
+                                />
+                                <Border 
+                                    CornerRadius="100" 
+                                    HorizontalAlignment="Right"
+                                    Grid.Column="1"
+                                    Background="#6EE7B7"
+                                    Padding="4"
+                                    VerticalAlignment="Top">
+                                    <TextBlock 
+                                        Text="Gas Boiler" 
+                                        FontSize="10"
+                                        Foreground="#047857"
+                                    />
+                                </Border>
+                            </Grid>
+                            <Grid Margin="0,6,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock 
+                                    Grid.Column="0"
+                                    Text="Max Heat Production" 
+                                    FontSize="14"
+                                    Foreground="#64748B"
+                                />
+                                <TextBlock 
+                                    Grid.Column="1"
+                                    Text="10 MWh" 
+                                    FontSize="14"
+                                    Foreground="#1E293B"
+                                    HorizontalAlignment="Right"
+                                />
+                            </Grid>
+                            <Grid Margin="0,6,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock 
+                                    Grid.Column="0"
+                                    Text="Electricity Production" 
+                                    FontSize="14"
+                                    Foreground="#64748B"
+                                />
+                                <TextBlock 
+                                    Grid.Column="1"
+                                    Text="0 MWh" 
+                                    FontSize="14"
+                                    Foreground="#1E293B"
+                                    HorizontalAlignment="Right"
+                                />
+                            </Grid>
+                            <Grid Margin="0,6,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock 
+                                    Grid.Column="0"
+                                    Text="Electricity Consumption" 
+                                    FontSize="14"
+                                    Foreground="#64748B"
+                                />
+                                <TextBlock 
+                                    Grid.Column="1"
+                                    Text="0 MWh" 
+                                    FontSize="14"
+                                    Foreground="#1E293B"
+                                    HorizontalAlignment="Right"
+                                />
+                            </Grid>
+                            <Grid Margin="0,6,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock 
+                                    Grid.Column="0"
+                                    Text="Production Costs" 
+                                    FontSize="14"
+                                    Foreground="#64748B"
+                                />
+                                <TextBlock 
+                                    Grid.Column="1"
+                                    Text="45 €/MWh" 
+                                    FontSize="14"
+                                    Foreground="#1E293B"
+                                    HorizontalAlignment="Right"
+                                />
+                            </Grid>
+                            <Grid Margin="0,6,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock 
+                                    Grid.Column="0"
+                                    Text="Primary Energy" 
+                                    FontSize="14"
+                                    Foreground="#64748B"
+                                />
+                                <TextBlock 
+                                    Grid.Column="1"
+                                    Text="12 MWh" 
+                                    FontSize="14"
+                                    Foreground="#1E293B"
+                                    HorizontalAlignment="Right"
+                                />
+                            </Grid>
+                            <Grid Margin="0,6,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock 
+                                    Grid.Column="0"
+                                    Text="CO2 Emissions" 
+                                    FontSize="14"
+                                    Foreground="#64748B"
+                                />
+                                <TextBlock 
+                                    Grid.Column="1"
+                                    Text="1.5 t/MWh" 
+                                    FontSize="14"
+                                    Foreground="#1E293B"
+                                    HorizontalAlignment="Right"
+                                />
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                    
+                    <!-- Top Right -->
+                    <Border
+                        Grid.Row="0"
+                        Grid.Column="2"
+                        BorderBrush="#CBD5E1"
+                        BorderThickness="1"
+                        CornerRadius="8"
+                        Margin="5"
+                        Padding="14">
+                        <StackPanel Orientation="Vertical">
+                            <Grid Margin="0,0,0,2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock 
+                                    Text="Oil Boiler 1" 
+                                    FontSize="18"
+                                    Foreground="#334155"
+                                    Margin="0,0,0,6"
+                                />
+                                <Border 
+                                    CornerRadius="100" 
+                                    HorizontalAlignment="Right"
+                                    Grid.Column="1"
+                                    Background="#FDBA74"
+                                    Padding="4"
+                                    VerticalAlignment="Top">
+                                    <TextBlock 
+                                        Text="Heat Pump" 
+                                        FontSize="10"
+                                        Foreground="#C2410C"
+                                    />
+                                </Border>
+                            </Grid>
+                            <Grid Margin="0,6,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock 
+                                    Grid.Column="0"
+                                    Text="Max Heat Production" 
+                                    FontSize="14"
+                                    Foreground="#64748B"
+                                />
+                                <TextBlock 
+                                    Grid.Column="1"
+                                    Text="10 MWh" 
+                                    FontSize="14"
+                                    Foreground="#1E293B"
+                                    HorizontalAlignment="Right"
+                                />
+                            </Grid>
+                            <Grid Margin="0,6,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock 
+                                    Grid.Column="0"
+                                    Text="Electricity Production" 
+                                    FontSize="14"
+                                    Foreground="#64748B"
+                                />
+                                <TextBlock 
+                                    Grid.Column="1"
+                                    Text="0 MWh" 
+                                    FontSize="14"
+                                    Foreground="#1E293B"
+                                    HorizontalAlignment="Right"
+                                />
+                            </Grid>
+                            <Grid Margin="0,6,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock 
+                                    Grid.Column="0"
+                                    Text="Electricity Consumption" 
+                                    FontSize="14"
+                                    Foreground="#64748B"
+                                />
+                                <TextBlock 
+                                    Grid.Column="1"
+                                    Text="0 MWh" 
+                                    FontSize="14"
+                                    Foreground="#1E293B"
+                                    HorizontalAlignment="Right"
+                                />
+                            </Grid>
+                            <Grid Margin="0,6,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock 
+                                    Grid.Column="0"
+                                    Text="Production Costs" 
+                                    FontSize="14"
+                                    Foreground="#64748B"
+                                />
+                                <TextBlock 
+                                    Grid.Column="1"
+                                    Text="45 €/MWh" 
+                                    FontSize="14"
+                                    Foreground="#1E293B"
+                                    HorizontalAlignment="Right"
+                                />
+                            </Grid>
+                            <Grid Margin="0,6,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock 
+                                    Grid.Column="0"
+                                    Text="Primary Energy" 
+                                    FontSize="14"
+                                    Foreground="#64748B"
+                                />
+                                <TextBlock 
+                                    Grid.Column="1"
+                                    Text="12 MWh" 
+                                    FontSize="14"
+                                    Foreground="#1E293B"
+                                    HorizontalAlignment="Right"
+                                />
+                            </Grid>
+                            <Grid Margin="0,6,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock 
+                                    Grid.Column="0"
+                                    Text="CO2 Emissions" 
+                                    FontSize="14"
+                                    Foreground="#64748B"
+                                />
+                                <TextBlock 
+                                    Grid.Column="1"
+                                    Text="1.5 t/MWh" 
+                                    FontSize="14"
+                                    Foreground="#1E293B"
+                                    HorizontalAlignment="Right"
+                                />
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                    
+                    <!-- Bottom Left -->
+                    <Border
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        BorderBrush="#CBD5E1"
+                        BorderThickness="1"
+                        CornerRadius="8"
+                        Margin="5"
+                        Padding="14">
+                        <StackPanel Orientation="Vertical">
+                            <Grid Margin="0,0,0,2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock 
+                                    Text="Gas Motor" 
+                                    FontSize="18"
+                                    Foreground="#334155"
+                                    Margin="0,0,0,6"
+                                />
+                                <Border 
+                                    CornerRadius="100" 
+                                    HorizontalAlignment="Right"
+                                    Grid.Column="1"
+                                    Background="#67E8F9"
+                                    Padding="4"
+                                    VerticalAlignment="Top">
+                                    <TextBlock 
+                                        Text="Gas Motor" 
+                                        FontSize="10"
+                                        Foreground="#0E7490"
+                                    />
+                                </Border>
+                            </Grid>
+                            <Grid Margin="0,6,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock 
+                                    Grid.Column="0"
+                                    Text="Max Heat Production" 
+                                    FontSize="14"
+                                    Foreground="#64748B"
+                                />
+                                <TextBlock 
+                                    Grid.Column="1"
+                                    Text="10 MWh" 
+                                    FontSize="14"
+                                    Foreground="#1E293B"
+                                    HorizontalAlignment="Right"
+                                />
+                            </Grid>
+                            <Grid Margin="0,6,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock 
+                                    Grid.Column="0"
+                                    Text="Electricity Production" 
+                                    FontSize="14"
+                                    Foreground="#64748B"
+                                />
+                                <TextBlock 
+                                    Grid.Column="1"
+                                    Text="0 MWh" 
+                                    FontSize="14"
+                                    Foreground="#1E293B"
+                                    HorizontalAlignment="Right"
+                                />
+                            </Grid>
+                            <Grid Margin="0,6,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock 
+                                    Grid.Column="0"
+                                    Text="Electricity Consumption" 
+                                    FontSize="14"
+                                    Foreground="#64748B"
+                                />
+                                <TextBlock 
+                                    Grid.Column="1"
+                                    Text="0 MWh" 
+                                    FontSize="14"
+                                    Foreground="#1E293B"
+                                    HorizontalAlignment="Right"
+                                />
+                            </Grid>
+                            <Grid Margin="0,6,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock 
+                                    Grid.Column="0"
+                                    Text="Production Costs" 
+                                    FontSize="14"
+                                    Foreground="#64748B"
+                                />
+                                <TextBlock 
+                                    Grid.Column="1"
+                                    Text="45 €/MWh" 
+                                    FontSize="14"
+                                    Foreground="#1E293B"
+                                    HorizontalAlignment="Right"
+                                />
+                            </Grid>
+                            <Grid Margin="0,6,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock 
+                                    Grid.Column="0"
+                                    Text="Primary Energy" 
+                                    FontSize="14"
+                                    Foreground="#64748B"
+                                />
+                                <TextBlock 
+                                    Grid.Column="1"
+                                    Text="12 MWh" 
+                                    FontSize="14"
+                                    Foreground="#1E293B"
+                                    HorizontalAlignment="Right"
+                                />
+                            </Grid>
+                            <Grid Margin="0,6,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock 
+                                    Grid.Column="0"
+                                    Text="CO2 Emissions" 
+                                    FontSize="14"
+                                    Foreground="#64748B"
+                                />
+                                <TextBlock 
+                                    Grid.Column="1"
+                                    Text="1.5 t/MWh" 
+                                    FontSize="14"
+                                    Foreground="#1E293B"
+                                    HorizontalAlignment="Right"
+                                />
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                    
+                    <!-- Bottom Middle -->
+                    <Border
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        BorderBrush="#CBD5E1"
+                        BorderThickness="1"
+                        CornerRadius="8"
+                        Margin="5"
+                        Padding="14">
+                        <StackPanel Orientation="Vertical">
+                            <Grid Margin="0,0,0,2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock 
+                                    Text="Heat Pump 1" 
+                                    FontSize="18"
+                                    Foreground="#334155"
+                                    Margin="0,0,0,6"
+                                />
+                                <Border 
+                                    CornerRadius="100" 
+                                    HorizontalAlignment="Right"
+                                    Grid.Column="1"
+                                    Background="#C4B5FD"
+                                    Padding="4"
+                                    VerticalAlignment="Top">
+                                    <TextBlock 
+                                        Text="Heat Pump" 
+                                        FontSize="10"
+                                        Foreground="#6D28D9"
+                                    />
+                                </Border>
+                            </Grid>
+                            <Grid Margin="0,6,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock 
+                                    Grid.Column="0"
+                                    Text="Max Heat Production" 
+                                    FontSize="14"
+                                    Foreground="#64748B"
+                                />
+                                <TextBlock 
+                                    Grid.Column="1"
+                                    Text="10 MWh" 
+                                    FontSize="14"
+                                    Foreground="#1E293B"
+                                    HorizontalAlignment="Right"
+                                />
+                            </Grid>
+                            <Grid Margin="0,6,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock 
+                                    Grid.Column="0"
+                                    Text="Electricity Production" 
+                                    FontSize="14"
+                                    Foreground="#64748B"
+                                />
+                                <TextBlock 
+                                    Grid.Column="1"
+                                    Text="0 MWh" 
+                                    FontSize="14"
+                                    Foreground="#1E293B"
+                                    HorizontalAlignment="Right"
+                                />
+                            </Grid>
+                            <Grid Margin="0,6,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock 
+                                    Grid.Column="0"
+                                    Text="Electricity Consumption" 
+                                    FontSize="14"
+                                    Foreground="#64748B"
+                                />
+                                <TextBlock 
+                                    Grid.Column="1"
+                                    Text="0 MWh" 
+                                    FontSize="14"
+                                    Foreground="#1E293B"
+                                    HorizontalAlignment="Right"
+                                />
+                            </Grid>
+                            <Grid Margin="0,6,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock 
+                                    Grid.Column="0"
+                                    Text="Production Costs" 
+                                    FontSize="14"
+                                    Foreground="#64748B"
+                                />
+                                <TextBlock 
+                                    Grid.Column="1"
+                                    Text="45 €/MWh" 
+                                    FontSize="14"
+                                    Foreground="#1E293B"
+                                    HorizontalAlignment="Right"
+                                />
+                            </Grid>
+                            <Grid Margin="0,6,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock 
+                                    Grid.Column="0"
+                                    Text="Primary Energy" 
+                                    FontSize="14"
+                                    Foreground="#64748B"
+                                />
+                                <TextBlock 
+                                    Grid.Column="1"
+                                    Text="12 MWh" 
+                                    FontSize="14"
+                                    Foreground="#1E293B"
+                                    HorizontalAlignment="Right"
+                                />
+                            </Grid>
+                            <Grid Margin="0,6,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock 
+                                    Grid.Column="0"
+                                    Text="CO2 Emissions" 
+                                    FontSize="14"
+                                    Foreground="#64748B"
+                                />
+                                <TextBlock 
+                                    Grid.Column="1"
+                                    Text="1.5 t/MWh" 
+                                    FontSize="14"
+                                    Foreground="#1E293B"
+                                    HorizontalAlignment="Right"
+                                />
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

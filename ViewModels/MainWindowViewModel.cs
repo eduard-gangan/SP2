@@ -1,0 +1,88 @@
+using System;
+using System.Windows.Input;
+using Avalonia.Controls;
+using SP2.Views;
+
+namespace SP2.ViewModels
+{
+    public class MainWindowViewModel : ViewModelBase
+    {
+        private UserControl _currentPage = new SystemConfig();
+        private int _activePageIndex = 0;
+        
+        public UserControl CurrentPage
+        {
+            get => _currentPage;
+            set
+            {
+                if (_currentPage != value)
+                {
+                    _currentPage = value;
+                    OnPropertyChanged(nameof(CurrentPage));
+                }
+            }
+        }
+        
+        public int ActivePageIndex
+        {
+            get => _activePageIndex;
+            set
+            {
+                if (_activePageIndex != value)
+                {
+                    _activePageIndex = value;
+                    OnPropertyChanged(nameof(ActivePageIndex));
+                    // Update all button active states
+                    OnPropertyChanged(nameof(IsPage1Active));
+                    OnPropertyChanged(nameof(IsPage2Active));
+                    OnPropertyChanged(nameof(IsPage3Active));
+                    OnPropertyChanged(nameof(IsPage4Active));
+                }
+            }
+        }
+        
+        // Properties for button active states
+        public bool IsPage1Active => ActivePageIndex == 0;
+        public bool IsPage2Active => ActivePageIndex == 1;
+        public bool IsPage3Active => ActivePageIndex == 2;
+        public bool IsPage4Active => ActivePageIndex == 3;
+
+        public ICommand NavigateToPage1Command { get; }
+        public ICommand NavigateToPage2Command { get; }
+        public ICommand NavigateToPage3Command { get; }
+        public ICommand NavigateToPage4Command { get; }
+
+        public MainWindowViewModel()
+        {
+            // Set up navigation commands
+            NavigateToPage1Command = new RelayCommand(_ => NavigateToPage1());
+            NavigateToPage2Command = new RelayCommand(_ => NavigateToPage2());
+            NavigateToPage3Command = new RelayCommand(_ => NavigateToPage3());
+            NavigateToPage4Command = new RelayCommand(_ => NavigateToPage4());
+        }
+
+        private void NavigateToPage1()
+        {
+            CurrentPage = new SystemConfig();
+            ActivePageIndex = 0;
+        }
+
+        private void NavigateToPage2()
+        {
+            CurrentPage = new Heat();
+            ActivePageIndex = 1;
+        }
+
+        private void NavigateToPage3()
+        {
+            CurrentPage = new Electricity();
+            ActivePageIndex = 2;
+        }
+
+        private void NavigateToPage4()
+        {
+            CurrentPage = new EconEnvironment();
+            ActivePageIndex = 3;
+        }
+    }
+}
