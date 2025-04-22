@@ -6,6 +6,7 @@
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,7 +27,6 @@
     <PackageReference Include="CsvHelper" Version="33.0.1" />
     <PackageReference Include="IronXL.Excel" Version="2025.3.1" />
     <PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia" Version="2.0.0-rc2" />
-	<AvaloniaResource Include="Assets\**" />
   </ItemGroup>
 
   <ItemGroup>
