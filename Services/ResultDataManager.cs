@@ -14,7 +14,7 @@ namespace SP2.Services
 {
     public static class ResultDataManager
     {
-        private static List<ResultData>? OptimizedData {get; set; }
+        private static List<ResultData>? OptimizedData { get; set; }
 
             public static void SetOptimizedData(ResultData data)
             {

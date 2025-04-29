@@ -8,13 +8,15 @@ namespace SP2.Models
 {
     public class ResultData
     {
-        public static double HeatProduction { get; set; }
-        public static double ElectricityProduction { get; set; }
-        public static double ElectricityConsumption { get; set; }
-        public static double Expenses {get; set; }
-        public static double Profit { get; set; }
-        public static double GasConsumption { get; set; }
-        public static double OilConsumption { get; set; }
-        public static double CO2Emissions { get; set; }
+        public DateTime TimeFrom { get; set; }
+        public DateTime TimeTo { get; set; }
+        public double HeatProduction { get; set; }
+        public double ElectricityProduction { get; set; }
+        public double ElectricityConsumption { get; set; }
+        public double Expenses {get; set; }
+        public double Profit { get; set; }
+        public double GasConsumption { get; set; }
+        public double OilConsumption { get; set; }
+        public double CO2Emissions { get; set; }
     }
 }
