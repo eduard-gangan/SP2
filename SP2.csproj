@@ -10,6 +10,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="SP2Tests\**" />
+    <EmbeddedResource Remove="SP2Tests\**" />
+    <None Remove="SP2Tests\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
   </ItemGroup>
 
@@ -27,12 +33,6 @@
     <PackageReference Include="CsvHelper" Version="33.0.1" />
     <PackageReference Include="IronXL.Excel" Version="2025.3.1" />
     <PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia" Version="2.0.0-rc2" />
-    <PackageReference Include="xunit" Version="2.9.2" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="3.0.2">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-	<AvaloniaResource Include="Assets\**" />
   </ItemGroup>
 
   <ItemGroup>
