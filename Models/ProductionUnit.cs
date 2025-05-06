@@ -14,8 +14,8 @@ namespace SP2.Models
         public double MaxHeat { get; }
         public double? MaxElectricity { get; }
         public double ProductionCosts { get; }
-        public double? CO2Emissions { get; }
-        public double? FuelConsumption { get; }
+        public double CO2Emissions { get; }
+        public double FuelConsumption { get; }
         public string? FuelType { get; }
         public UnitType Type { get; }
         public double ElectricityProduction { get; }
@@ -25,9 +25,9 @@ namespace SP2.Models
             string name, 
             string imagePath, 
             double maxHeat, 
-            double? maxElectricity, 
+            double maxElectricity, 
             double productionCosts, 
-            double? co2Emissions, 
+            double co2Emissions, 
             double fuelConsumption, 
             string fuelType,
             UnitType type,

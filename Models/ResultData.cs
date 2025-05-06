@@ -18,5 +18,6 @@ namespace SP2.Models
         public double GasConsumption { get; set; }
         public double OilConsumption { get; set; }
         public double CO2Emissions { get; set; }
+        public List<ProductionUnit> ProductionUnitsUsed { get; set; }
     }
 }

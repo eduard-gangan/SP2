@@ -14,27 +14,44 @@ namespace SP2.Services
 {
     public static class ResultDataManager
     {
-        private static List<ResultData>? OptimizedData { get; set; }
+        private static List<ResultData> WinterOptimizedData { get; set; } = new List<ResultData>();
+        private static List<ResultData> SummerOptimizedData { get; set; } = new List<ResultData>();
 
-            public static void SetOptimizedData(ResultData data)
-            {
-                OptimizedData.Add(data);
-            }
+        public static void SetWinterOptimizedData(ResultData data)
+        {
+            WinterOptimizedData.Add(data);
+        }
 
-            
-            public static List<ResultData>? GetOptimizedData()
-            {
-                return OptimizedData;
-            }
+        public static void SetSummerOptimizedData(ResultData data)
+        {
+            SummerOptimizedData.Add(data);
+        }
 
-            public static ResultData? GetResultByTime(DateTime from, DateTime to)
-            {
-                if (OptimizedData == null)
-                    return null;
+        public static List<ResultData>? GetWinterOptimizedData()
+        {
+            return WinterOptimizedData;
+        }
 
-                return OptimizedData
-                    .FirstOrDefault(r => r.TimeFrom == from && r.TimeTo == to);
-            }
-        
+        public static List<ResultData>? GetSummerOptimizedData()
+        {
+            return SummerOptimizedData;
+        }
+
+        public static ResultData? GetWinterResultByTime(DateTime from, DateTime to)
+        {
+            if (WinterOptimizedData == null)
+                return null;
+
+            return WinterOptimizedData
+                .FirstOrDefault(r => r.TimeFrom == from && r.TimeTo == to);
+        }
+
+        public static ResultData? GetSummerResultByTime(DateTime from, DateTime to)
+        {
+            if (SummerOptimizedData == null)
+                return null;
+            return SummerOptimizedData
+                .FirstOrDefault(r => r.TimeFrom == from && r.TimeTo == to);
+        }
     }
 }
