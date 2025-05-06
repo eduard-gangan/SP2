@@ -1,60 +1,91 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using SkiaSharp;
 using SP2.Models;
+using SP2.Services;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SP2.Services
 {
-    public class Optimiser
+    public static class Optimiser
     {
-        private readonly List<ProductionUnit> _productionUnits;
-        private readonly Dictionary<DateTime, double> _electricityPrices;
+        private static readonly List<TimeSeriesData> CSVData = SourceDataManager.LoadData("../../../Assets/2025 Heat Production Optimization - Danfoss Deliveries - Source Data Manager.csv");
+        private static readonly List<ProductionUnit> ProductionUnits = AssetManager.GetProdUnits();
 
-        public Optimiser(List<ProductionUnit> productionUnits, Dictionary<DateTime, double> electricityPrices)
+        public static void OptimizeScenario1()
         {
-            _productionUnits = productionUnits;
-            _electricityPrices = electricityPrices;
-        }
-
-        public List<(ProductionUnit Unit, double Utilization)> Optimise(double targetHeatDemand)
-        {
-            var result = new List<(ProductionUnit Unit, double Utilization)>();
-            double remainingDemand = targetHeatDemand;
-
-            // Sort units by net production cost (lowest first)
-            var sortedUnits = _productionUnits
-                .OrderBy(u => CalculateNetProductionCost(u))
-                .ToList();
-
-            foreach (var unit in sortedUnits)
+            bool isWinter = true;
+            
+            foreach (var data in CSVData)
             {
-                if (remainingDemand <= 0) break;
+                double TargetHeatDemand = 0;
+                double Expenses = 0;
+                double GasConsumption = 0;
+                double OilConsumption = 0;
+                double CO2Emissions = 0;
+                ResultData result = new ResultData();
+                List<ProductionUnit> ProductionUnitsUsed = new List<ProductionUnit>();
 
-                double utilization = Math.Min(1.0, remainingDemand / unit.MaxHeat);
-                result.Add((unit, utilization));
-                remainingDemand -= unit.MaxHeat * utilization;
-            }
+                TargetHeatDemand = data.HeatDemand;
+                int UnitIndex = 0;
+                while (TargetHeatDemand > 0)
+                {
+                    ProductionUnit productionUnit = ProductionUnits[UnitIndex];
+                    TargetHeatDemand -= productionUnit.MaxHeat;
+                    if (TargetHeatDemand > 0)
+                    {
+                        Expenses += productionUnit.ProductionCosts * productionUnit.MaxHeat;
+                        CO2Emissions += productionUnit.CO2Emissions * productionUnit.MaxHeat;
+                        if (productionUnit.FuelType == "Gas")
+                        {
+                            GasConsumption += productionUnit.MaxHeat * productionUnit.FuelConsumption;
+                        }
+                        else
+                        {
+                            OilConsumption += productionUnit.MaxHeat * productionUnit.FuelConsumption;
+                        }
+                    }
+                    else
+                    {
+                        double temporaryHeat = productionUnit.MaxHeat + TargetHeatDemand;
+                        Expenses += productionUnit.ProductionCosts * temporaryHeat;
+                        CO2Emissions += productionUnit.CO2Emissions * temporaryHeat;
+                        if (productionUnit.FuelType == "Gas")
+                        {
+                            GasConsumption += temporaryHeat * productionUnit.FuelConsumption;
+                        }
+                        else
+                        {
+                            OilConsumption += temporaryHeat * productionUnit.FuelConsumption;
+                        }
+                    }
+                    ProductionUnitsUsed.Add(productionUnit);
+                    UnitIndex++;
+                }
+                result.HeatProduction = data.HeatDemand;
+                result.ElectricityProduction = 0;
+                result.ElectricityConsumption = 0;
+                result.Expenses = Math.Round(Expenses, 2);
+                result.Profit = 0;
+                result.GasConsumption = Math.Round(GasConsumption, 2);
+                result.OilConsumption = Math.Round(OilConsumption, 2);
+                result.CO2Emissions = Math.Round(CO2Emissions, 2);
+                result.ProductionUnitsUsed = ProductionUnitsUsed;
+                result.TimeFrom = data.TimeFrom;
+                result.TimeTo = data.TimeTo;
 
-            return result;
-        }
+                if (isWinter)
+                {
+                    ResultDataManager.SetWinterOptimizedData(result);
+                }
+                else
+                {
+                    ResultDataManager.SetSummerOptimizedData(result);
+                }
 
-        private double CalculateNetProductionCost(ProductionUnit unit)
-        {
-            double baseCost = unit.ProductionCosts;
-
-            switch (unit.Type)
-            {
-                case UnitType.HeatOnly:
-                    return baseCost;
-
-                case UnitType.ElectricityProducing:
-                    return baseCost - (unit.ElectricityProduction * _electricityPrices.Values.Average());
-
-                case UnitType.ElectricityConsuming:
-                    return baseCost + (unit.ElectricityConsumption * _electricityPrices.Values.Average());
-
-                default:
-                    return baseCost;
+                isWinter = !isWinter;
             }
         }
     }
