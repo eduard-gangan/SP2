@@ -12,7 +12,9 @@ namespace SP2.Services
     public static class Optimiser
     {
         private static readonly List<TimeSeriesData> CSVData = SourceDataManager.LoadData("../../../Assets/2025 Heat Production Optimization - Danfoss Deliveries - Source Data Manager.csv");
-        private static readonly List<ProductionUnit> ProductionUnits = AssetManager.GetProdUnits();
+        private static readonly List<ProductionUnit> ProductionUnits1 = AssetManager.GetProdUnits();
+        private static readonly List<ProductionUnit> ProductionUnits2 = AssetManager.GetProdUnits();
+
 
         public static void OptimizeScenario1()
         {
@@ -32,7 +34,7 @@ namespace SP2.Services
                 int UnitIndex = 0;
                 while (TargetHeatDemand > 0)
                 {
-                    ProductionUnit productionUnit = ProductionUnits[UnitIndex];
+                    ProductionUnit productionUnit = ProductionUnits1[UnitIndex];
                     TargetHeatDemand -= productionUnit.MaxHeat;
                     if (TargetHeatDemand > 0)
                     {
@@ -86,6 +88,121 @@ namespace SP2.Services
                 }
 
                 isWinter = !isWinter;
+            }
+        }
+        public static void OptimizeScenario2()
+        {
+            bool isSummer = true;
+            Dictionary<string, double> netCosts = new Dictionary<string, double>();
+            List<ProductionUnit> productionUnits = ProductionUnits2;
+
+            foreach (var data in CSVData)
+            {
+                double targetHeatDemand = data.HeatDemand;
+                double expenses = 0;
+                double gasConsumption = 0;
+                double oilConsumption = 0;
+                double co2Emissions = 0;
+                double electricityProduction = 0;
+                double electricityConsumption = 0;
+                double profit = 0;
+
+                ResultData result = new ResultData();
+                List<ProductionUnit> productionUnitsUsed = new List<ProductionUnit>();
+
+                // Calculate net costs for each unit
+                foreach (var unit in productionUnits)
+                {
+                    double netCost;
+                    if (unit.FuelType == "Gas" && unit.Type == UnitType.HeatOnly)
+                    {
+                        // Gas boiler - heat only
+                        netCost = unit.ProductionCosts;
+                    }
+                    else if (unit.FuelType == "Oil")
+                    {
+                        // Oil boiler - heat only
+                        netCost = unit.ProductionCosts;
+                    }
+                    else if (unit.FuelType == "Gas" && unit.Type == UnitType.ElectricityProducing)
+                    {
+                        // Gas motor - electricity producing
+                        netCost = unit.ProductionCosts - data.ElectricityPrice;
+                    }
+                    else if (unit.Type == UnitType.ElectricityConsuming)
+                    {
+                        // Heat pump - electricity consuming
+                        netCost = unit.ProductionCosts + (unit.MaxHeat * data.ElectricityPrice);
+                    }
+                    else
+                    {
+                        netCost = double.MaxValue; 
+                    }
+
+                    netCosts[unit.Name] = netCost;
+                }
+
+                // Sort units from lowest to highest net cost
+                var sortedUnits = productionUnits.OrderBy(u => netCosts[u.Name]).ToList();
+
+                // Optimize production
+                foreach (var unit in sortedUnits)
+                {
+                    if (targetHeatDemand <= 0) break;
+    
+                    double heatToProduce = Math.Min(unit.MaxHeat, targetHeatDemand);
+                    targetHeatDemand -= heatToProduce;
+        
+                    
+                    expenses += unit.ProductionCosts * heatToProduce;
+                    co2Emissions += unit.CO2Emissions * heatToProduce;
+
+                    if (unit.FuelType == "Gas")
+                    {
+                        gasConsumption += heatToProduce * unit.FuelConsumption;
+                    }
+                    else if (unit.FuelType == "Oil")
+                    {
+                        oilConsumption += heatToProduce * unit.FuelConsumption;
+                    }
+
+                    // Handle electricity production and consumption
+                    if (unit.Type == UnitType.ElectricityProducing)
+                    {
+                        electricityProduction += heatToProduce * unit.ElectricityProduction;
+                        profit += heatToProduce * data.ElectricityPrice;
+                    }
+                    else if (unit.Type == UnitType.ElectricityConsuming)
+                    {
+                        electricityConsumption += heatToProduce * unit.ElectricityConsumption;
+                        expenses += heatToProduce * data.ElectricityPrice;
+                    }
+
+                    productionUnitsUsed.Add(unit);
+                }
+
+                result.HeatProduction = data.HeatDemand;
+                result.ElectricityProduction = Math.Round(electricityProduction, 2);
+                result.ElectricityConsumption = Math.Round(electricityConsumption, 2);
+                result.Expenses = Math.Round(expenses, 2);
+                result.Profit = Math.Round(profit, 2);
+                result.GasConsumption = Math.Round(gasConsumption, 2);
+                result.OilConsumption = Math.Round(oilConsumption, 2);
+                result.CO2Emissions = Math.Round(co2Emissions, 2);
+                result.ProductionUnitsUsed = productionUnitsUsed;
+                result.TimeFrom = data.TimeFrom;
+                result.TimeTo = data.TimeTo;
+
+                if (isSummer)
+                {
+                    ResultDataManager.SetSummerOptimizedData(result);
+                }
+                else
+                {
+                    ResultDataManager.SetWinterOptimizedData(result);
+                }
+
+                isSummer = !isSummer;
             }
         }
     }
