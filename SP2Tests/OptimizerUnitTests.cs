@@ -82,7 +82,6 @@ namespace SP2Tests
 
             // Assert
             var summerResult = ResultDataManager.GetSummerOptimizedData("Scenario2")?.FirstOrDefault();
-            var sumerresult = ResultDataManager.GetSummerOptimizedData("Scenario2");
             Assert.NotNull(summerResult);
             
             // Verify that profit is calculated correctly based on electricity production
@@ -101,9 +100,13 @@ namespace SP2Tests
             // Act
             Optimiser.OptimizeScenario2();
 
+            var filteredData = ResultDataManager.GetWinterOptimizedData("Scenario2")?
+                .Where(r => r.ProductionUnitsUsed.Any(u => u.Name == "Heat Pump 1"))
+                .ToList();
+
             // Assert
             var summerResult = ResultDataManager.GetSummerOptimizedData("Scenario2")?.FirstOrDefault();
-            var res = ResultDataManager.GetWinterOptimizedData("Scenario2")?.FirstOrDefault(r => r.HeatProduction > 7.5);
+
             Assert.NotNull(summerResult);
             
             // Verify that electricity consumption is calculated correctly
@@ -152,11 +155,11 @@ namespace SP2Tests
             }
             else if (unit.FuelType == "Gas" && unit.Type == UnitType.ElectricityProducing)
             {
-                return unit.ProductionCosts - (unit.MaxElectricity * 100.0); // Using a fixed electricity price for testing
+                return unit.ProductionCosts - unit.MaxElectricity/unit.MaxHeat * 100.0; // Using a fixed electricity price for testing
             }
             else if (unit.Type == UnitType.ElectricityConsuming)
             {
-                return unit.ProductionCosts + (unit.MaxHeat * 100.0); 
+                return unit.ProductionCosts + 100.0; 
             }
             return double.MaxValue;
         }
