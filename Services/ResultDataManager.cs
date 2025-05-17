@@ -91,5 +91,14 @@ namespace SP2.Services
                     .FirstOrDefault(r => r.TimeFrom == from && r.TimeTo == to);
             }
         }
+
+        public static void ClearData()
+        {
+            WinterOptimizedData1.Clear();
+            SummerOptimizedData1.Clear();
+            WinterOptimizedData2.Clear();
+            SummerOptimizedData2.Clear();
+        }
+
     }
 }

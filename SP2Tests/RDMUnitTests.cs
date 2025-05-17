@@ -4,7 +4,7 @@ using SP2.Models;
 
 namespace SP2Tests
 {
-    public class ResultDataManagerTests
+    public class RDMUnitTests
     {
         [Fact]
         public void SetWinterOptimizedData_ShouldAddDataToWinterList()
@@ -25,6 +25,8 @@ namespace SP2Tests
             // Assert
             Assert.NotNull(winterData);
             Assert.Contains(resultData, winterData);
+
+            Dispose();
         }
 
         [Fact]
@@ -48,6 +50,8 @@ namespace SP2Tests
             // Assert
             Assert.NotNull(retrievedData);
             Assert.Equal(resultData, retrievedData);
+
+            Dispose();
         }
 
         [Fact]
@@ -58,6 +62,14 @@ namespace SP2Tests
 
             // Assert
             Assert.Null(retrievedData);
+
+            Dispose();
+        }
+
+        [Fact]
+        public void Dispose()
+        {
+            ResultDataManager.ClearData();
         }
     }
 }
