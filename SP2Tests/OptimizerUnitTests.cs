@@ -103,6 +103,7 @@ namespace SP2Tests
 
             // Assert
             var summerResult = ResultDataManager.GetSummerOptimizedData("Scenario2")?.FirstOrDefault();
+            var res = ResultDataManager.GetWinterOptimizedData("Scenario2")?.FirstOrDefault(r => r.HeatProduction > 7.5);
             Assert.NotNull(summerResult);
             
             // Verify that electricity consumption is calculated correctly

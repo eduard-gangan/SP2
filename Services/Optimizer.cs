@@ -11,7 +11,7 @@ namespace SP2.Services
 {
     public static class Optimiser
     {
-        private static readonly List<TimeSeriesData> CSVData = SourceDataManager.LoadData("../../../../Assets/2025 Heat Production Optimization - Danfoss Deliveries - Source Data Manager.csv");
+        private static readonly List<TimeSeriesData> CSVData = SourceDataManager.LoadData("../../../Assets/2025 Heat Production Optimization - Danfoss Deliveries - Source Data Manager.csv");
         //private static readonly List<TimeSeriesData> CSVData = SourceDataManager.LoadData("/Users/davidskorepa/Desktop/ProjectWork/SP2/Assets/2025 Heat Production Optimization - Danfoss Deliveries - Source Data Manager.csv");
         private static readonly List<ProductionUnit> ProductionUnits1 = AssetManager.GetProdUnits();
         private static readonly List<ProductionUnit> ProductionUnits2 = AssetManager.GetProdUnits();
@@ -165,7 +165,7 @@ namespace SP2.Services
                     }
                     else if (unit.FuelType == "Gas" && unit.Type == UnitType.ElectricityProducing)
                     {
-                        netCost = unit.ProductionCosts - data.ElectricityPrice;
+                        netCost = unit.ProductionCosts - (unit.MaxElectricity * data.ElectricityPrice);
                     }
                     else if (unit.Type == UnitType.ElectricityConsuming)
                     {
