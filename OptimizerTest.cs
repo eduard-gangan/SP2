@@ -20,8 +20,8 @@ namespace SP2
             Optimiser.OptimizeScenario1();
             
             // Get results from ResultDataManager
-            winterResults = ResultDataManager.GetWinterOptimizedData();
-            summerResults = ResultDataManager.GetSummerOptimizedData();
+            winterResults = ResultDataManager.GetSummerOptimizedData("Scenario1");
+            summerResults = ResultDataManager.GetSummerOptimizedData("Scenario1");
             
             // Validate results
             Console.WriteLine("\n=== Validation Results ===");
@@ -59,8 +59,8 @@ namespace SP2
             Optimiser.OptimizeScenario2();
             
             // Get results from ResultDataManager
-            winterResults = ResultDataManager.GetWinterOptimizedData();
-            summerResults = ResultDataManager.GetSummerOptimizedData();
+            winterResults = ResultDataManager.GetSummerOptimizedData("Scenario2");
+            summerResults = ResultDataManager.GetSummerOptimizedData("Scenario2");
             
             // Validate results
             Console.WriteLine("\n=== Validation Results ===");

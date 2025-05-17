@@ -14,44 +14,82 @@ namespace SP2.Services
 {
     public static class ResultDataManager
     {
-        private static List<ResultData> WinterOptimizedData { get; set; } = new List<ResultData>();
-        private static List<ResultData> SummerOptimizedData { get; set; } = new List<ResultData>();
+        private static List<ResultData> WinterOptimizedData1 { get; set; } = new List<ResultData>();
+        private static List<ResultData> SummerOptimizedData1 { get; set; } = new List<ResultData>();
+        private static List<ResultData> WinterOptimizedData2 { get; set; } = new List<ResultData>();
+        private static List<ResultData> SummerOptimizedData2 { get; set; } = new List<ResultData>();
 
-        public static void SetWinterOptimizedData(ResultData data)
+        public static void SetWinterOptimizedData(ResultData data, string scenario)
         {
-            WinterOptimizedData.Add(data);
+            if (scenario == "Scenario1")
+                WinterOptimizedData1.Add(data);
+            else
+                WinterOptimizedData2.Add(data);
         }
 
-        public static void SetSummerOptimizedData(ResultData data)
+        public static void SetSummerOptimizedData(ResultData data, string scenario)
         {
-            SummerOptimizedData.Add(data);
+            if (scenario == "Scenario1")
+                SummerOptimizedData1.Add(data);
+            else
+                SummerOptimizedData2.Add(data);
         }
 
-        public static List<ResultData>? GetWinterOptimizedData()
+        public static List<ResultData>? GetWinterOptimizedData(string scenario)
         {
-            return WinterOptimizedData;
+            if (scenario == "Scenario1")
+            {
+                return WinterOptimizedData1;
+            }
+            else
+            {
+                return WinterOptimizedData2;
+            }
         }
 
-        public static List<ResultData>? GetSummerOptimizedData()
+        public static List<ResultData>? GetSummerOptimizedData(string scenario)
         {
-            return SummerOptimizedData;
+            if (scenario == "Scenario1")
+                return SummerOptimizedData1;
+            else
+                return SummerOptimizedData2;
         }
 
-        public static ResultData? GetWinterResultByTime(DateTime from, DateTime to)
+        public static ResultData? GetWinterResultByTime(DateTime from, DateTime to, string scenario)
         {
-            if (WinterOptimizedData == null)
-                return null;
+            if (scenario == "Scenario1")
+            {
+                if (WinterOptimizedData1 == null)
+                    return null;
 
-            return WinterOptimizedData
-                .FirstOrDefault(r => r.TimeFrom == from && r.TimeTo == to);
+                return WinterOptimizedData1
+                    .FirstOrDefault(r => r.TimeFrom == from && r.TimeTo == to);
+            }
+            else
+            {
+                if (WinterOptimizedData2 == null)
+                    return null;
+                return WinterOptimizedData2
+                    .FirstOrDefault(r => r.TimeFrom == from && r.TimeTo == to);
+            }
         }
 
-        public static ResultData? GetSummerResultByTime(DateTime from, DateTime to)
+        public static ResultData? GetSummerResultByTime(DateTime from, DateTime to, string scenario)
         {
-            if (SummerOptimizedData == null)
-                return null;
-            return SummerOptimizedData
-                .FirstOrDefault(r => r.TimeFrom == from && r.TimeTo == to);
+            if (scenario == "Scenario1")
+            {
+                if (SummerOptimizedData1 == null)
+                    return null;
+                return SummerOptimizedData1
+                    .FirstOrDefault(r => r.TimeFrom == from && r.TimeTo == to);
+            }
+            else
+            {
+                if (SummerOptimizedData2 == null)
+                    return null;
+                return SummerOptimizedData2
+                    .FirstOrDefault(r => r.TimeFrom == from && r.TimeTo == to);
+            }
         }
     }
 }

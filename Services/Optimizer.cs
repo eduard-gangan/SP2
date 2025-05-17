@@ -11,8 +11,8 @@ namespace SP2.Services
 {
     public static class Optimiser
     {
-        // private static readonly List<TimeSeriesData> CSVData = SourceDataManager.LoadData("../Assets/2025 Heat Production Optimization - Danfoss Deliveries - Source Data Manager.csv");
-        private static readonly List<TimeSeriesData> CSVData = SourceDataManager.LoadData("/Users/davidskorepa/Desktop/ProjectWork/SP2/Assets/2025 Heat Production Optimization - Danfoss Deliveries - Source Data Manager.csv");
+        private static readonly List<TimeSeriesData> CSVData = SourceDataManager.LoadData("../../../../Assets/2025 Heat Production Optimization - Danfoss Deliveries - Source Data Manager.csv");
+        //private static readonly List<TimeSeriesData> CSVData = SourceDataManager.LoadData("/Users/davidskorepa/Desktop/ProjectWork/SP2/Assets/2025 Heat Production Optimization - Danfoss Deliveries - Source Data Manager.csv");
         private static readonly List<ProductionUnit> ProductionUnits1 = AssetManager.GetProdUnits();
         private static readonly List<ProductionUnit> ProductionUnits2 = AssetManager.GetProdUnits();
 
@@ -108,12 +108,12 @@ namespace SP2.Services
 
                 if (isWinter)
                 {
-                    ResultDataManager.SetWinterOptimizedData(result);
+                    ResultDataManager.SetWinterOptimizedData(result, "Scenario1");
                     Console.WriteLine("Saved as winter data");
                 }
                 else
                 {
-                    ResultDataManager.SetSummerOptimizedData(result);
+                    ResultDataManager.SetSummerOptimizedData(result, "Scenario1");
                     Console.WriteLine("Saved as summer data");
                 }
 
@@ -126,7 +126,7 @@ namespace SP2.Services
         {
             Console.WriteLine("\n=== Starting Scenario 2 Optimization ===");
             
-            bool isSummer = true;
+            bool isSummer = false;
             Dictionary<string, double> netCosts = new Dictionary<string, double>();
             List<ProductionUnit> productionUnits = ProductionUnits2;
 
@@ -254,12 +254,12 @@ namespace SP2.Services
 
                 if (isSummer)
                 {
-                    ResultDataManager.SetSummerOptimizedData(result);
+                    ResultDataManager.SetSummerOptimizedData(result, "Scenario2");
                     Console.WriteLine("Saved as summer data");
                 }
                 else
                 {
-                    ResultDataManager.SetWinterOptimizedData(result);
+                    ResultDataManager.SetWinterOptimizedData(result, "Scenario2");
                     Console.WriteLine("Saved as winter data");
                 }
 
