@@ -15,11 +15,25 @@ class Program
     // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
     // yet and stuff might break.
     [STAThread]
-    public static void Main(string[] args) => BuildAvaloniaApp()
-        .StartWithClassicDesktopLifetime(args);
-
-    
-    
+    public static void Main(string[] args)
+    {
+        if (args.Length > 0)
+        {
+            if (args[0] == "--test-optimizer")
+            {
+                OptimizerTest.RunScenario1();
+                return;
+            }
+            else if (args[0] == "--test-optimizer2")
+            {
+                OptimizerTest.RunScenario2();
+                return;
+            }
+        }
+        
+        BuildAvaloniaApp()
+            .StartWithClassicDesktopLifetime(args);
+    }
 
     // Avalonia configuration, don't remove; also used by visual designer.
     public static AppBuilder BuildAvaloniaApp()
