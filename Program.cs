@@ -17,20 +17,8 @@ class Program
     [STAThread]
     public static void Main(string[] args)
     {
-        if (args.Length > 0)
-        {
-            if (args[0] == "--test-optimizer")
-            {
-                OptimizerTest.RunScenario1();
-                return;
-            }
-            else if (args[0] == "--test-optimizer2")
-            {
-                OptimizerTest.RunScenario2();
-                return;
-            }
-        }
-        
+        Optimiser.OptimizeScenario1();
+        Optimiser.OptimizeScenario2();
         BuildAvaloniaApp()
             .StartWithClassicDesktopLifetime(args);
     }
