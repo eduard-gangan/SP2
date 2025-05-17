@@ -12,11 +12,11 @@ namespace SP2.Models
         public string Name { get; }
         public string ImagePath { get; }
         public double MaxHeat { get; }
-        public double? MaxElectricity { get; }
+        public double MaxElectricity { get; }
         public double ProductionCosts { get; }
         public double CO2Emissions { get; }
         public double FuelConsumption { get; }
-        public string? FuelType { get; }
+        public string FuelType { get; }
         public UnitType Type { get; }
         public double ElectricityProduction { get; }
         public double ElectricityConsumption { get; }
