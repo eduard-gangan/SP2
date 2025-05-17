@@ -2,7 +2,7 @@
 using SP2.Services;
 using SP2.Models;
 
-namespace SP2.SP2Tests
+namespace SP2Tests
 {
     public class SDMUnitTests
     {
