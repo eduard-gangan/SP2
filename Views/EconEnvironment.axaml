@@ -2,12 +2,107 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
+             xmlns:vm="using:SP2.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="SP2.Views.EconEnvironment">
-    <Grid>
-        <TextBlock Text="Page 4 Content" 
-                   HorizontalAlignment="Center" 
-                   VerticalAlignment="Center" 
-                   FontSize="24"/>
+             x:Class="SP2.Views.EconEnvironment"
+             x:DataType="vm:EconEnvironmentViewModel">
+    <Grid  
+        HorizontalAlignment="Left"
+        MinWidth="900"
+    >
+        <StackPanel>
+            <!-- Scenario Selection -->
+                    <StackPanel 
+                        Grid.Column="1" 
+                        Orientation="Horizontal" 
+                        VerticalAlignment="Center"
+                        Margin="28,14,28,14">
+                        <TextBlock 
+                            Text="Scenario:" 
+                            VerticalAlignment="Center"
+                            Margin="0,0,8,0"
+                            FontSize="16"
+                            Foreground="Black"
+                        />
+                        <Border
+                            BorderBrush="#CBD5E1"
+                            BorderThickness="1"
+                            CornerRadius="8"
+                            Background="White"
+                        >
+                            <ComboBox 
+                                Width="120"
+                                ItemsSource="{Binding AvailableScenarios}"
+                                SelectedItem="{Binding SelectedScenario}"
+                                Background="White"
+                                Foreground="Black"
+                                Padding="8,4"
+                                BorderThickness="0"
+                                CornerRadius="8"
+                            />
+                        </Border>
+                    </StackPanel>
+            
+            <!-- Production Costs Chart -->
+            <Border
+                BorderBrush="#CBD5E1"
+                BorderThickness="1"
+                CornerRadius="12"
+                Padding="24"
+                Margin="28,14,28,14"
+            >
+                <Grid RowDefinitions="Auto,*">
+                    <TextBlock 
+                        Grid.Row="0"
+                        Text="{Binding ProductionCostsTitle}" 
+                        FontSize="24"
+                        FontWeight="Bold"
+                        Foreground="Black"
+                        Margin="0,0,0,0"
+                    />
+                    
+                    <lvc:CartesianChart
+                        Grid.Row="1"
+                        Series="{Binding ProductionCostsSeries}"
+                        XAxes="{Binding ProductionCostsXAxes}"
+                        YAxes="{Binding ProductionCostsYAxes}"
+                        TooltipPosition="Top"
+                        AnimationsSpeed="00:00:00.500"
+                        Height="200">
+                    </lvc:CartesianChart>
+                </Grid>
+            </Border>
+            
+            <!-- CO2 Emissions Chart -->
+            <Border
+                BorderBrush="#CBD5E1"
+                BorderThickness="1"
+                CornerRadius="12"
+                Padding="24"
+                Margin="28,14,28,28"
+            >
+                <Grid RowDefinitions="Auto,*">
+                    <TextBlock 
+                        Grid.Row="0"
+                        Text="{Binding CO2EmissionsTitle}" 
+                        FontSize="24"
+                        FontWeight="Bold"
+                        Foreground="Black"
+                        Margin="0,0,0,0"
+                    />
+                    
+                    <lvc:CartesianChart
+                        Grid.Row="1"
+                        Series="{Binding CO2EmissionsSeries}"
+                        XAxes="{Binding CO2EmissionsXAxes}"
+                        YAxes="{Binding CO2EmissionsYAxes}"
+                        TooltipPosition="Top"
+                        AnimationsSpeed="00:00:00.500"
+                        Height="200">
+                    </lvc:CartesianChart>
+                </Grid>
+            </Border>
+        </StackPanel>
     </Grid>
 </UserControl>

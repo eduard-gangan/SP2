@@ -19,6 +19,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <AvaloniaResource Include="Assets\2025 Heat Production Optimization - Danfoss Deliveries - Source Data Manager.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
     <PackageReference Include="xunit" Version="2.9.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.5.7">

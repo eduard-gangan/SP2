@@ -2,12 +2,76 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
+             xmlns:vm="using:SP2.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="SP2.Views.Electricity">
-    <Grid>
-        <TextBlock Text="Page 3 Content" 
-                   HorizontalAlignment="Center" 
-                   VerticalAlignment="Center" 
-                   FontSize="24"/>
+             x:Class="SP2.Views.Electricity"
+             x:DataType="vm:ElectricityViewModel">
+   <Grid  
+        HorizontalAlignment="Left"
+        MinWidth="900"
+    >
+        <Border
+            BorderBrush="#CBD5E1"
+            BorderThickness="1"
+            CornerRadius="12"
+            Padding="24"
+            Margin="28,0,28,28"
+        >
+            <Grid RowDefinitions="Auto,*">
+                <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
+                    <TextBlock 
+                        Grid.Column="0"
+                        Text="{Binding ChartTitle}" 
+                        FontSize="28"
+                        FontWeight="Bold"
+                        Foreground="Black"
+                        Margin="0,0,0,16"
+                        VerticalAlignment="Center"
+                    />
+                    
+                    <StackPanel 
+                        Grid.Column="1" 
+                        Orientation="Horizontal" 
+                        VerticalAlignment="Center"
+                        Margin="0,0,0,16">
+                        <TextBlock 
+                            Text="Season:" 
+                            VerticalAlignment="Center"
+                            Margin="0,0,8,0"
+                            FontSize="16"
+                            Foreground="Black"
+                        />
+                        <Border
+                            BorderBrush="#CBD5E1"
+                            BorderThickness="1"
+                            CornerRadius="8"
+                            Background="White"
+                        >
+                            <ComboBox 
+                                Width="120"
+                                ItemsSource="{Binding AvailableSeasons}"
+                                SelectedItem="{Binding SelectedSeason}"
+                                Background="White"
+                                Foreground="Black"
+                                Padding="8,4"
+                                BorderThickness="0"
+                                CornerRadius="8"
+                            />
+                        </Border>
+                    </StackPanel>
+                </Grid>
+                
+                <lvc:CartesianChart
+                    Grid.Row="2"
+                    Series="{Binding ElectricityPriceSeries}"
+                    XAxes="{Binding ElectricityPriceXAxes}"
+                    YAxes="{Binding ElectricityPriceYAxes}"
+                    TooltipPosition="Top"
+                    AnimationsSpeed="00:00:00.500"
+                    Height="550">
+                </lvc:CartesianChart>
+            </Grid>
+        </Border>
     </Grid>
 </UserControl>

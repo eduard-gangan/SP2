@@ -18,25 +18,10 @@ class Program
     public static void Main(string[] args)
     {
         Optimiser.OptimizeScenario1();
-        var result = ResultDataManager.GetWinterOptimizedData();
-        foreach (var data in result)
-        {
-            Debug.WriteLine($"Time: {data.TimeFrom} - {data.TimeTo}, Heat Production: {data.HeatProduction}, Expenses: {data.Expenses}, {data.CO2Emissions}, {data.GasConsumption}, {data.OilConsumption}");
-        }
-        Debug.WriteLine(result.Count());
-
-        var result2 = ResultDataManager.GetSummerOptimizedData();
-        foreach (var data in result2)
-        {
-            Debug.WriteLine($"Time: {data.TimeFrom} - {data.TimeTo}, Heat Production: {data.HeatProduction}, Expenses: {data.Expenses}, {data.CO2Emissions}, {data.GasConsumption}, {data.OilConsumption}");
-        }
-        Debug.WriteLine(result2.Count());
-
+        Optimiser.OptimizeScenario2();
         BuildAvaloniaApp()
-        .StartWithClassicDesktopLifetime(args);
-
+            .StartWithClassicDesktopLifetime(args);
     }
-    
 
     // Avalonia configuration, don't remove; also used by visual designer.
     public static AppBuilder BuildAvaloniaApp()
