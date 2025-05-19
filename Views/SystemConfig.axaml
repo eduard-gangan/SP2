@@ -4,16 +4,23 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SP2.Views.SystemConfig">
-    <Grid  
-        HorizontalAlignment="Left"
-    >
-        <Border
-            BorderBrush="#CBD5E1"
-            BorderThickness="1"
-            CornerRadius="12"
-            Padding="24"
-            Margin="28,0,28,28"
-        >
+    <UserControl.Resources>
+        <Thickness x:Key="HoverImageOffset">-5,-5,0,0</Thickness>
+    </UserControl.Resources>
+    <Grid HorizontalAlignment="Left">
+        <Panel>
+            <!-- Hover Image that follows cursor -->
+            <Canvas Name="HoverImageCanvas" Panel.ZIndex="100" IsHitTestVisible="False" IsVisible="False">
+                <Image Name="HoverImage" Width="150" Height="150" Canvas.Left="0" Canvas.Top="0" Stretch="Uniform"/>
+            </Canvas>
+            
+            <Border
+                BorderBrush="#CBD5E1"
+                BorderThickness="1"
+                CornerRadius="12"
+                Padding="24"
+                Margin="28,0,28,28"
+            >
             <Grid>
                 <TextBlock 
                     Text="Heat Production Units" 
@@ -34,13 +41,18 @@
                     
                     <!-- Top Left -->
                     <Border
+                        Name="GasBoiler1Border"
                         Grid.Row="0"
                         Grid.Column="0"
                         BorderBrush="#CBD5E1"
                         BorderThickness="1"
                         CornerRadius="8"
                         Margin="5"
-                        Padding="14">
+                        Padding="14"
+                        PointerEntered="Border_PointerEntered"
+                        PointerExited="Border_PointerExited"
+                        PointerMoved="Border_PointerMoved"
+                        Tag="GasBoiler">
                         <StackPanel Orientation="Vertical">
                             <Grid Margin="0,0,0,2">
                                 <Grid.ColumnDefinitions>
@@ -80,7 +92,7 @@
                                 />
                                 <TextBlock 
                                     Grid.Column="1"
-                                    Text="10 MWh" 
+                                    Text="4.0 MWh" 
                                     FontSize="14"
                                     Foreground="#1E293B"
                                     HorizontalAlignment="Right"
@@ -137,7 +149,7 @@
                                 />
                                 <TextBlock 
                                     Grid.Column="1"
-                                    Text="45 €/MWh" 
+                                    Text="520.0 €/MWh" 
                                     FontSize="14"
                                     Foreground="#1E293B"
                                     HorizontalAlignment="Right"
@@ -156,7 +168,7 @@
                                 />
                                 <TextBlock 
                                     Grid.Column="1"
-                                    Text="12 MWh" 
+                                    Text="175.0 MWh" 
                                     FontSize="14"
                                     Foreground="#1E293B"
                                     HorizontalAlignment="Right"
@@ -175,7 +187,7 @@
                                 />
                                 <TextBlock 
                                     Grid.Column="1"
-                                    Text="1.5 t/MWh" 
+                                    Text="0.9 t/MWh" 
                                     FontSize="14"
                                     Foreground="#1E293B"
                                     HorizontalAlignment="Right"
@@ -186,13 +198,18 @@
                     
                     <!-- Top Middle -->
                     <Border
+                        Name="GasBoiler2Border"
                         Grid.Row="0"
                         Grid.Column="1"
                         BorderBrush="#CBD5E1"
                         BorderThickness="1"
                         CornerRadius="8"
                         Margin="5"
-                        Padding="14">
+                        Padding="14"
+                        PointerEntered="Border_PointerEntered"
+                        PointerExited="Border_PointerExited"
+                        PointerMoved="Border_PointerMoved"
+                        Tag="GasBoiler">
                         <StackPanel Orientation="Vertical">
                             <Grid Margin="0,0,0,2">
                                 <Grid.ColumnDefinitions>
@@ -232,7 +249,7 @@
                                 />
                                 <TextBlock 
                                     Grid.Column="1"
-                                    Text="10 MWh" 
+                                    Text="3.0 MWh" 
                                     FontSize="14"
                                     Foreground="#1E293B"
                                     HorizontalAlignment="Right"
@@ -289,7 +306,7 @@
                                 />
                                 <TextBlock 
                                     Grid.Column="1"
-                                    Text="45 €/MWh" 
+                                    Text="560.0 €/MWh" 
                                     FontSize="14"
                                     Foreground="#1E293B"
                                     HorizontalAlignment="Right"
@@ -308,7 +325,7 @@
                                 />
                                 <TextBlock 
                                     Grid.Column="1"
-                                    Text="12 MWh" 
+                                    Text="130.0 MWh" 
                                     FontSize="14"
                                     Foreground="#1E293B"
                                     HorizontalAlignment="Right"
@@ -327,7 +344,7 @@
                                 />
                                 <TextBlock 
                                     Grid.Column="1"
-                                    Text="1.5 t/MWh" 
+                                    Text="0.7 t/MWh" 
                                     FontSize="14"
                                     Foreground="#1E293B"
                                     HorizontalAlignment="Right"
@@ -338,13 +355,18 @@
                     
                     <!-- Top Right -->
                     <Border
+                        Name="OilBoiler1Border"
                         Grid.Row="0"
                         Grid.Column="2"
                         BorderBrush="#CBD5E1"
                         BorderThickness="1"
                         CornerRadius="8"
                         Margin="5"
-                        Padding="14">
+                        Padding="14"
+                        PointerEntered="Border_PointerEntered"
+                        PointerExited="Border_PointerExited"
+                        PointerMoved="Border_PointerMoved"
+                        Tag="OilBoiler">
                         <StackPanel Orientation="Vertical">
                             <Grid Margin="0,0,0,2">
                                 <Grid.ColumnDefinitions>
@@ -384,7 +406,7 @@
                                 />
                                 <TextBlock 
                                     Grid.Column="1"
-                                    Text="10 MWh" 
+                                    Text="4.0 MWh" 
                                     FontSize="14"
                                     Foreground="#1E293B"
                                     HorizontalAlignment="Right"
@@ -441,7 +463,7 @@
                                 />
                                 <TextBlock 
                                     Grid.Column="1"
-                                    Text="45 €/MWh" 
+                                    Text="670.0 €/MWh" 
                                     FontSize="14"
                                     Foreground="#1E293B"
                                     HorizontalAlignment="Right"
@@ -460,7 +482,7 @@
                                 />
                                 <TextBlock 
                                     Grid.Column="1"
-                                    Text="12 MWh" 
+                                    Text="330.0 MWh" 
                                     FontSize="14"
                                     Foreground="#1E293B"
                                     HorizontalAlignment="Right"
@@ -490,13 +512,18 @@
                     
                     <!-- Bottom Left -->
                     <Border
+                        Name="GasMotor1Border"
                         Grid.Row="1"
                         Grid.Column="0"
                         BorderBrush="#CBD5E1"
                         BorderThickness="1"
                         CornerRadius="8"
                         Margin="5"
-                        Padding="14">
+                        Padding="14"
+                        PointerEntered="Border_PointerEntered"
+                        PointerExited="Border_PointerExited"
+                        PointerMoved="Border_PointerMoved"
+                        Tag="GasMotor">
                         <StackPanel Orientation="Vertical">
                             <Grid Margin="0,0,0,2">
                                 <Grid.ColumnDefinitions>
@@ -504,7 +531,7 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock 
-                                    Text="Gas Motor" 
+                                    Text="Gas Motor 1" 
                                     FontSize="18"
                                     Foreground="#334155"
                                     Margin="0,0,0,6"
@@ -536,7 +563,7 @@
                                 />
                                 <TextBlock 
                                     Grid.Column="1"
-                                    Text="10 MWh" 
+                                    Text="3.5 MWh" 
                                     FontSize="14"
                                     Foreground="#1E293B"
                                     HorizontalAlignment="Right"
@@ -555,7 +582,7 @@
                                 />
                                 <TextBlock 
                                     Grid.Column="1"
-                                    Text="0 MWh" 
+                                    Text="2.6 MWh" 
                                     FontSize="14"
                                     Foreground="#1E293B"
                                     HorizontalAlignment="Right"
@@ -593,7 +620,7 @@
                                 />
                                 <TextBlock 
                                     Grid.Column="1"
-                                    Text="45 €/MWh" 
+                                    Text="990.0 €/MWh" 
                                     FontSize="14"
                                     Foreground="#1E293B"
                                     HorizontalAlignment="Right"
@@ -612,7 +639,7 @@
                                 />
                                 <TextBlock 
                                     Grid.Column="1"
-                                    Text="12 MWh" 
+                                    Text="650.0 MWh" 
                                     FontSize="14"
                                     Foreground="#1E293B"
                                     HorizontalAlignment="Right"
@@ -631,7 +658,7 @@
                                 />
                                 <TextBlock 
                                     Grid.Column="1"
-                                    Text="1.5 t/MWh" 
+                                    Text="1.8 t/MWh" 
                                     FontSize="14"
                                     Foreground="#1E293B"
                                     HorizontalAlignment="Right"
@@ -642,13 +669,18 @@
                     
                     <!-- Bottom Middle -->
                     <Border
+                        Name="HeatPump1Border"
                         Grid.Row="1"
                         Grid.Column="1"
                         BorderBrush="#CBD5E1"
                         BorderThickness="1"
                         CornerRadius="8"
                         Margin="5"
-                        Padding="14">
+                        Padding="14"
+                        PointerEntered="Border_PointerEntered"
+                        PointerExited="Border_PointerExited"
+                        PointerMoved="Border_PointerMoved"
+                        Tag="HeatPump">
                         <StackPanel Orientation="Vertical">
                             <Grid Margin="0,0,0,2">
                                 <Grid.ColumnDefinitions>
@@ -688,7 +720,7 @@
                                 />
                                 <TextBlock 
                                     Grid.Column="1"
-                                    Text="10 MWh" 
+                                    Text="6.0 MWh" 
                                     FontSize="14"
                                     Foreground="#1E293B"
                                     HorizontalAlignment="Right"
@@ -726,7 +758,7 @@
                                 />
                                 <TextBlock 
                                     Grid.Column="1"
-                                    Text="0 MWh" 
+                                    Text="6.0 MWh" 
                                     FontSize="14"
                                     Foreground="#1E293B"
                                     HorizontalAlignment="Right"
@@ -745,7 +777,7 @@
                                 />
                                 <TextBlock 
                                     Grid.Column="1"
-                                    Text="45 €/MWh" 
+                                    Text="60.0 €/MWh" 
                                     FontSize="14"
                                     Foreground="#1E293B"
                                     HorizontalAlignment="Right"
@@ -764,7 +796,7 @@
                                 />
                                 <TextBlock 
                                     Grid.Column="1"
-                                    Text="12 MWh" 
+                                    Text="0 MWh" 
                                     FontSize="14"
                                     Foreground="#1E293B"
                                     HorizontalAlignment="Right"
@@ -783,7 +815,7 @@
                                 />
                                 <TextBlock 
                                     Grid.Column="1"
-                                    Text="1.5 t/MWh" 
+                                    Text="0 t/MWh" 
                                     FontSize="14"
                                     Foreground="#1E293B"
                                     HorizontalAlignment="Right"
@@ -794,5 +826,6 @@
                 </Grid>
             </Grid>
         </Border>
+        </Panel>
     </Grid>
 </UserControl>

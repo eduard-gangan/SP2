@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using LiveChartsCore;
 using LiveChartsCore.Defaults;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using SkiaSharp;
+using SP2.Models;
+using SP2.Services;
 
 namespace SP2.ViewModels
 {
@@ -14,9 +17,13 @@ namespace SP2.ViewModels
         private string _selectedSeason = "Winter";
         private ObservableCollection<ISeries> _electricityPriceSeries;
         private string _chartTitle = "Electricity prices time series - Winter";
+        private List<TimeSeriesData> _timeSeriesData;
 
         public ElectricityViewModel()
         {
+            // Load the data from CSV
+            _timeSeriesData = SourceDataManager.LoadData("Assets/2025 Heat Production Optimization - Danfoss Deliveries - Source Data Manager.csv");
+            
             // Initialize the chart data
             UpdateChartData();
         }
@@ -99,35 +106,19 @@ namespace SP2.ViewModels
 
         private void InitializeWinterPriceChart()
         {
-            // Create sample data for the Winter Electricity Price chart
-            // In a real application, this would come from your data source
-            var hourlyPriceValues = new ObservableCollection<DateTimePoint>
+            // Filter winter data (March data from the CSV)
+            var winterData = _timeSeriesData
+                .Where(d => d.TimeFrom.Month == 3) // March data represents winter
+                .OrderBy(d => d.TimeFrom)
+                .ToList();
+
+            // Create data points for the Winter Electricity Price chart
+            var hourlyPriceValues = new ObservableCollection<DateTimePoint>();
+            
+            foreach (var data in winterData)
             {
-                new DateTimePoint(new DateTime(2025, 1, 1, 0, 0, 0), 42),
-                new DateTimePoint(new DateTime(2025, 1, 1, 1, 0, 0), 40),
-                new DateTimePoint(new DateTime(2025, 1, 1, 2, 0, 0), 38),
-                new DateTimePoint(new DateTime(2025, 1, 1, 3, 0, 0), 35),
-                new DateTimePoint(new DateTime(2025, 1, 1, 4, 0, 0), 36),
-                new DateTimePoint(new DateTime(2025, 1, 1, 5, 0, 0), 40),
-                new DateTimePoint(new DateTime(2025, 1, 1, 6, 0, 0), 45),
-                new DateTimePoint(new DateTime(2025, 1, 1, 7, 0, 0), 52),
-                new DateTimePoint(new DateTime(2025, 1, 1, 8, 0, 0), 60),
-                new DateTimePoint(new DateTime(2025, 1, 1, 9, 0, 0), 65),
-                new DateTimePoint(new DateTime(2025, 1, 1, 10, 0, 0), 68),
-                new DateTimePoint(new DateTime(2025, 1, 1, 11, 0, 0), 70),
-                new DateTimePoint(new DateTime(2025, 1, 1, 12, 0, 0), 72),
-                new DateTimePoint(new DateTime(2025, 1, 1, 13, 0, 0), 71),
-                new DateTimePoint(new DateTime(2025, 1, 1, 14, 0, 0), 69),
-                new DateTimePoint(new DateTime(2025, 1, 1, 15, 0, 0), 68),
-                new DateTimePoint(new DateTime(2025, 1, 1, 16, 0, 0), 70),
-                new DateTimePoint(new DateTime(2025, 1, 1, 17, 0, 0), 75),
-                new DateTimePoint(new DateTime(2025, 1, 1, 18, 0, 0), 80),
-                new DateTimePoint(new DateTime(2025, 1, 1, 19, 0, 0), 78),
-                new DateTimePoint(new DateTime(2025, 1, 1, 20, 0, 0), 72),
-                new DateTimePoint(new DateTime(2025, 1, 1, 21, 0, 0), 65),
-                new DateTimePoint(new DateTime(2025, 1, 1, 22, 0, 0), 58),
-                new DateTimePoint(new DateTime(2025, 1, 1, 23, 0, 0), 50)
-            };
+                hourlyPriceValues.Add(new DateTimePoint(data.TimeFrom, data.ElectricityPrice));
+            }
 
             // Create the line series with styling
             ElectricityPriceSeries = new ObservableCollection<ISeries>
@@ -176,35 +167,19 @@ namespace SP2.ViewModels
 
         private void InitializeSummerPriceChart()
         {
-            // Create sample data for the Summer Electricity Price chart
-            // In a real application, this would come from your data source
-            var hourlyPriceValues = new ObservableCollection<DateTimePoint>
+            // Filter summer data (August data from the CSV)
+            var summerData = _timeSeriesData
+                .Where(d => d.TimeFrom.Month == 8) // August data represents summer
+                .OrderBy(d => d.TimeFrom)
+                .ToList();
+
+            // Create data points for the Summer Electricity Price chart
+            var hourlyPriceValues = new ObservableCollection<DateTimePoint>();
+            
+            foreach (var data in summerData)
             {
-                new DateTimePoint(new DateTime(2025, 7, 1, 0, 0, 0), 30),
-                new DateTimePoint(new DateTime(2025, 7, 1, 1, 0, 0), 28),
-                new DateTimePoint(new DateTime(2025, 7, 1, 2, 0, 0), 25),
-                new DateTimePoint(new DateTime(2025, 7, 1, 3, 0, 0), 22),
-                new DateTimePoint(new DateTime(2025, 7, 1, 4, 0, 0), 20),
-                new DateTimePoint(new DateTime(2025, 7, 1, 5, 0, 0), 22),
-                new DateTimePoint(new DateTime(2025, 7, 1, 6, 0, 0), 25),
-                new DateTimePoint(new DateTime(2025, 7, 1, 7, 0, 0), 30),
-                new DateTimePoint(new DateTime(2025, 7, 1, 8, 0, 0), 35),
-                new DateTimePoint(new DateTime(2025, 7, 1, 9, 0, 0), 40),
-                new DateTimePoint(new DateTime(2025, 7, 1, 10, 0, 0), 45),
-                new DateTimePoint(new DateTime(2025, 7, 1, 11, 0, 0), 50),
-                new DateTimePoint(new DateTime(2025, 7, 1, 12, 0, 0), 55),
-                new DateTimePoint(new DateTime(2025, 7, 1, 13, 0, 0), 58),
-                new DateTimePoint(new DateTime(2025, 7, 1, 14, 0, 0), 60),
-                new DateTimePoint(new DateTime(2025, 7, 1, 15, 0, 0), 62),
-                new DateTimePoint(new DateTime(2025, 7, 1, 16, 0, 0), 60),
-                new DateTimePoint(new DateTime(2025, 7, 1, 17, 0, 0), 58),
-                new DateTimePoint(new DateTime(2025, 7, 1, 18, 0, 0), 55),
-                new DateTimePoint(new DateTime(2025, 7, 1, 19, 0, 0), 50),
-                new DateTimePoint(new DateTime(2025, 7, 1, 20, 0, 0), 45),
-                new DateTimePoint(new DateTime(2025, 7, 1, 21, 0, 0), 40),
-                new DateTimePoint(new DateTime(2025, 7, 1, 22, 0, 0), 35),
-                new DateTimePoint(new DateTime(2025, 7, 1, 23, 0, 0), 32)
-            };
+                hourlyPriceValues.Add(new DateTimePoint(data.TimeFrom, data.ElectricityPrice));
+            }
 
             // Create the line series with styling
             ElectricityPriceSeries = new ObservableCollection<ISeries>

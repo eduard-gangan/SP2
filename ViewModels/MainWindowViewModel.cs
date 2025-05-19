@@ -7,8 +7,23 @@ namespace SP2.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private UserControl _currentPage = new SystemConfig();
+        private static MainWindowViewModel _instance;
+        private UserControl _currentPage;
         private int _activePageIndex = 0;
+        private bool _isStartScreenActive = true;
+        
+        public bool IsStartScreenActive
+        {
+            get => _isStartScreenActive;
+            set
+            {
+                if (_isStartScreenActive != value)
+                {
+                    _isStartScreenActive = value;
+                    OnPropertyChanged(nameof(IsStartScreenActive));
+                }
+            }
+        }
         
         public UserControl CurrentPage
         {
@@ -54,11 +69,26 @@ namespace SP2.ViewModels
 
         public MainWindowViewModel()
         {
+            _instance = this;
+            
+            // Initially show the start screen
+            CurrentPage = new StartScreen();
+            
             // Set up navigation commands
             NavigateToPage1Command = new RelayCommand(_ => NavigateToPage1());
             NavigateToPage2Command = new RelayCommand(_ => NavigateToPage2());
             NavigateToPage3Command = new RelayCommand(_ => NavigateToPage3());
             NavigateToPage4Command = new RelayCommand(_ => NavigateToPage4());
+        }
+        
+        // Static method to navigate from start screen to main content
+        public static void NavigateToMainContent()
+        {
+            if (_instance != null)
+            {
+                _instance.IsStartScreenActive = false;
+                _instance.NavigateToPage1();
+            }
         }
 
         private void NavigateToPage1()

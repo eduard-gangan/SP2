@@ -1,22 +1,106 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using LiveChartsCore;
 using LiveChartsCore.Defaults;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using SkiaSharp;
+using SP2.Models;
+using SP2.Services;
 
 namespace SP2.ViewModels
 {
     public class HeatViewModel : ViewModelBase
     {
-        public HeatViewModel()
+// Property to hold the selected season
+private string _selectedSeason;
+public string SelectedSeason
+{
+    get => _selectedSeason;
+    set
+    {
+        if (_selectedSeason != value)
         {
-            // Initialize the chart data
+            _selectedSeason = value;
+            OnPropertyChanged(nameof(SelectedSeason));
+            
+            // Update chart title
+            UpdateChartTitle();
+            
+            // Update charts when season changes
             InitializeHeatDemandChart();
             InitializeHeatProductionChart();
         }
+    }
+}
+
+// Property to hold the available seasons
+public List<string> AvailableSeasons { get; } = new List<string> { "Winter", "Summer" };
+
+// Property to hold the selected scenario
+private string _selectedScenario;
+public string SelectedScenario
+{
+    get => _selectedScenario;
+    set
+    {
+        if (_selectedScenario != value)
+        {
+            _selectedScenario = value;
+            OnPropertyChanged(nameof(SelectedScenario));
+            
+            // Update chart title
+            UpdateChartTitle();
+            
+            // Update charts when scenario changes
+            InitializeHeatProductionChart();
+        }
+    }
+}
+
+// Property to hold the available scenarios
+public List<string> AvailableScenarios { get; } = new List<string> { "Scenario1", "Scenario2" };
+
+// Property for the Heat Production chart title
+private string _heatProductionTitle;
+public string HeatProductionTitle
+{
+    get => _heatProductionTitle;
+    set
+    {
+        if (_heatProductionTitle != value)
+        {
+            _heatProductionTitle = value;
+            OnPropertyChanged(nameof(HeatProductionTitle));
+        }
+    }
+}
+
+// Helper method to update the chart title
+private void UpdateChartTitle()
+{
+    HeatProductionTitle = $"Heat Production by Unit ({SelectedSeason} - {SelectedScenario})";
+}
+
+public HeatViewModel()
+{
+    // Run the optimization to generate data
+    Services.Optimiser.OptimizeScenario1();
+    Services.Optimiser.OptimizeScenario2();
+    
+    // Set default values
+    _selectedSeason = "Winter";
+    _selectedScenario = "Scenario1";
+    
+    // Set initial chart title
+    UpdateChartTitle();
+    
+    // Initialize the chart data
+    InitializeHeatDemandChart();
+    InitializeHeatProductionChart();
+}
 
         #region Heat Demand Chart Properties
 
@@ -48,242 +132,286 @@ namespace SP2.ViewModels
 
         private void InitializeHeatDemandChart()
         {
-            // Create sample data for the Heat Demand line chart
-            // In a real application, this would come from your data source
-            var monthlyDemandValues = new ObservableCollection<DateTimePoint>
+            // Load real data from the CSV file using SourceDataManager
+            var csvPath = "Assets/2025 Heat Production Optimization - Danfoss Deliveries - Source Data Manager.csv";
+            var timeSeriesData = SourceDataManager.LoadData(csvPath);
+            
+            // Filter data based on selected season
+            var filteredData = FilterDataBySeason(timeSeriesData);
+            
+            // Group the data by day and calculate the average heat demand for each day
+            var dailyDemandValues = new ObservableCollection<DateTimePoint>();
+            
+            // Group by date (ignoring time component)
+            var groupedByDay = filteredData
+                .GroupBy(d => d.TimeFrom.Date)
+                .OrderBy(g => g.Key);
+                
+            foreach (var dayGroup in groupedByDay)
             {
-                new DateTimePoint(new DateTime(2025, 1, 1), 120),
-                new DateTimePoint(new DateTime(2025, 2, 1), 132),
-                new DateTimePoint(new DateTime(2025, 3, 1), 101),
-                new DateTimePoint(new DateTime(2025, 4, 1), 89),
-                new DateTimePoint(new DateTime(2025, 5, 1), 62),
-                new DateTimePoint(new DateTime(2025, 6, 1), 45),
-                new DateTimePoint(new DateTime(2025, 7, 1), 40),
-                new DateTimePoint(new DateTime(2025, 8, 1), 38),
-                new DateTimePoint(new DateTime(2025, 9, 1), 57),
-                new DateTimePoint(new DateTime(2025, 10, 1), 78),
-                new DateTimePoint(new DateTime(2025, 11, 1), 98),
-                new DateTimePoint(new DateTime(2025, 12, 1), 110)
-            };
+                // Calculate average heat demand for the day
+                double avgHeatDemand = dayGroup.Average(d => d.HeatDemand);
+                dailyDemandValues.Add(new DateTimePoint(dayGroup.Key, avgHeatDemand));
+            }
 
-            // Create the line series with styling
+            // Create the line series with enhanced styling
             HeatDemandSeries = new ObservableCollection<ISeries>
             {
                 new LineSeries<DateTimePoint>
                 {
-                    // Name = "Heat Demand (MWh)",
-                    Values = monthlyDemandValues,
-                    Fill = null,
-                    GeometrySize = 8,
-                    Stroke = new SolidColorPaint(SKColors.DodgerBlue),
+                    Name = "Heat Demand",
+                    Values = dailyDemandValues,
+                    Fill = new SolidColorPaint(SKColors.DodgerBlue.WithAlpha(40)),
+                    GeometrySize = 6,
+                    Stroke = new SolidColorPaint(SKColors.DodgerBlue, 2),
                     GeometryStroke = new SolidColorPaint(SKColors.DodgerBlue),
                     GeometryFill = new SolidColorPaint(SKColors.White),
-                    LineSmoothness = 0.5, // Makes the line slightly curved for better visualization
-                    TooltipLabelFormatter = point => $"{((DateTimePoint)point.Model).DateTime:MMM yyyy}: {((DateTimePoint)point.Model).Value} MWh"
+                    LineSmoothness = 0.7,
+                    TooltipLabelFormatter = point => $"{((DateTimePoint)point.Model).DateTime:d MMM yyyy}: {((DateTimePoint)point.Model).Value:F2} MWh"
                 }
             };
 
-            // Configure the X-axis (time axis)
+            // Configure the X-axis (time axis) with improved formatting
             HeatDemandXAxes = new List<Axis>
             {
                 new Axis
                 {
-                    // Name = "Month",
+                    Name = "",
                     NamePaint = new SolidColorPaint(SKColors.Black),
                     LabelsPaint = new SolidColorPaint(SKColors.DarkSlateGray),
                     TextSize = 12,
-                    Labeler = value => new DateTime((long)value).ToString("MMM"),
-                    UnitWidth = TimeSpan.FromDays(30).Ticks,
-                    MinStep = TimeSpan.FromDays(30).Ticks
+                    Labeler = value => new DateTime((long)value).ToString("d MMM"),
+                    UnitWidth = TimeSpan.FromDays(1).Ticks,
+                    MinStep = TimeSpan.FromDays(7).Ticks, // Show weekly labels for better readability
+                    LabelsRotation = 45 // Rotate labels for better fit
                 }
             };
 
-            // Configure the Y-axis
+            // Configure the Y-axis with improved formatting
             HeatDemandYAxes = new List<Axis>
             {
                 new Axis
                 {
-                    // Name = "Heat Demand (MWh)",
+                    Name = "",
                     NamePaint = new SolidColorPaint(SKColors.Black),
                     LabelsPaint = new SolidColorPaint(SKColors.DarkSlateGray),
                     TextSize = 12,
                     MinLimit = 0, // Start Y-axis at 0
-                    Labeler = value => $"{value} MWh"
+                    SeparatorsPaint = new SolidColorPaint(SKColors.LightGray.WithAlpha(100)) { StrokeThickness = 1 },
+                    Labeler = value => $"{value:F1} MWh"
                 }
             };
+            
+            // Notify that the chart data has changed
+            OnPropertyChanged(nameof(HeatDemandSeries));
+            OnPropertyChanged(nameof(HeatDemandXAxes));
+            OnPropertyChanged(nameof(HeatDemandYAxes));
         }
 
-        private void InitializeHeatProductionChart()
+// Helper method to filter time series data by season
+private List<TimeSeriesData> FilterDataBySeason(List<TimeSeriesData> data)
+{
+    if (data == null || !data.Any())
+        return new List<TimeSeriesData>();
+        
+    // Filter based on selected season
+    if (SelectedSeason == "Winter")
+    {
+        // For winter, include data from October to March
+        return data.Where(d => 
+            d.TimeFrom.Month >= 10 || d.TimeFrom.Month <= 3
+        ).ToList();
+    }
+    else
+    {
+        // For summer, include data from April to September
+        return data.Where(d => 
+            d.TimeFrom.Month >= 4 && d.TimeFrom.Month <= 9
+        ).ToList();
+    }
+}
+
+private void InitializeHeatProductionChart()
+{
+    // Get the optimized data based on selected scenario
+    List<ResultData> data;
+    
+    if (SelectedSeason == "Winter")
+    {
+        data = ResultDataManager.GetWinterOptimizedData(SelectedScenario);
+    }
+    else
+    {
+        data = ResultDataManager.GetSummerOptimizedData(SelectedScenario);
+    }
+    
+    if (data == null || !data.Any())
+    {
+        // If no data is available, return empty chart
+        HeatProductionSeries = new ObservableCollection<ISeries>();
+        HeatProductionXAxes = new List<Axis>();
+        HeatProductionYAxes = new List<Axis>();
+        return;
+    }
+    
+    // Sort by time
+    var allData = data.OrderBy(d => d.TimeFrom).ToList();
+    
+    // Get all unique production units used across all time periods
+    var allUnits = allData
+        .SelectMany(d => d.ProductionUnitsUsed)
+        .Select(u => u.Name)
+        .Distinct()
+        .ToList();
+    
+    // Create a dictionary to store data series for each production unit
+    var unitDataSeries = new Dictionary<string, ObservableCollection<DateTimePoint>>();
+    
+    // Initialize empty collections for each unit
+    foreach (var unitName in allUnits)
+    {
+        unitDataSeries[unitName] = new ObservableCollection<DateTimePoint>();
+    }
+    
+    // Process each time period
+    foreach (var period in allData)
+    {
+        // Use the middle of the time period as the data point time
+        var pointTime = period.TimeFrom.AddHours((period.TimeTo - period.TimeFrom).TotalHours / 2);
+        
+        // Calculate total heat production for this period
+        double totalHeat = period.HeatProduction;
+        
+        // Dictionary to track heat production by unit for this period
+        var unitHeatProduction = new Dictionary<string, double>();
+        
+        // Initialize all units to 0 for this period
+        foreach (var unitName in allUnits)
         {
-            // Heat Pump data
-            var heatPumpValues = new ObservableCollection<DateTimePoint>
-            {
-                new DateTimePoint(new DateTime(2025, 1, 1), 70),
-                new DateTimePoint(new DateTime(2025, 2, 1), 75),
-                new DateTimePoint(new DateTime(2025, 3, 1), 60),
-                new DateTimePoint(new DateTime(2025, 4, 1), 55),
-                new DateTimePoint(new DateTime(2025, 5, 1), 40),
-                new DateTimePoint(new DateTime(2025, 6, 1), 30),
-                new DateTimePoint(new DateTime(2025, 7, 1), 25),
-                new DateTimePoint(new DateTime(2025, 8, 1), 23),
-                new DateTimePoint(new DateTime(2025, 9, 1), 35),
-                new DateTimePoint(new DateTime(2025, 10, 1), 45),
-                new DateTimePoint(new DateTime(2025, 11, 1), 60),
-                new DateTimePoint(new DateTime(2025, 12, 1), 65)
-            };
-            
-            // Gas Boiler data
-            var gasBoilerValues = new ObservableCollection<DateTimePoint>
-            {
-                new DateTimePoint(new DateTime(2025, 1, 1), 50),
-                new DateTimePoint(new DateTime(2025, 2, 1), 57),
-                new DateTimePoint(new DateTime(2025, 3, 1), 41),
-                new DateTimePoint(new DateTime(2025, 4, 1), 34),
-                new DateTimePoint(new DateTime(2025, 5, 1), 22),
-                new DateTimePoint(new DateTime(2025, 6, 1), 15),
-                new DateTimePoint(new DateTime(2025, 7, 1), 15),
-                new DateTimePoint(new DateTime(2025, 8, 1), 15),
-                new DateTimePoint(new DateTime(2025, 9, 1), 22),
-                new DateTimePoint(new DateTime(2025, 10, 1), 33),
-                new DateTimePoint(new DateTime(2025, 11, 1), 38),
-                new DateTimePoint(new DateTime(2025, 12, 1), 45)
-            };
-            
-            // Electric Boiler data
-            var electricBoilerValues = new ObservableCollection<DateTimePoint>
-            {
-                new DateTimePoint(new DateTime(2025, 1, 1), 30),
-                new DateTimePoint(new DateTime(2025, 2, 1), 28),
-                new DateTimePoint(new DateTime(2025, 3, 1), 25),
-                new DateTimePoint(new DateTime(2025, 4, 1), 20),
-                new DateTimePoint(new DateTime(2025, 5, 1), 15),
-                new DateTimePoint(new DateTime(2025, 6, 1), 10),
-                new DateTimePoint(new DateTime(2025, 7, 1), 8),
-                new DateTimePoint(new DateTime(2025, 8, 1), 7),
-                new DateTimePoint(new DateTime(2025, 9, 1), 12),
-                new DateTimePoint(new DateTime(2025, 10, 1), 18),
-                new DateTimePoint(new DateTime(2025, 11, 1), 25),
-                new DateTimePoint(new DateTime(2025, 12, 1), 32)
-            };
-            
-            // Solar Thermal data
-            var solarThermalValues = new ObservableCollection<DateTimePoint>
-            {
-                new DateTimePoint(new DateTime(2025, 1, 1), 5),
-                new DateTimePoint(new DateTime(2025, 2, 1), 8),
-                new DateTimePoint(new DateTime(2025, 3, 1), 15),
-                new DateTimePoint(new DateTime(2025, 4, 1), 22),
-                new DateTimePoint(new DateTime(2025, 5, 1), 30),
-                new DateTimePoint(new DateTime(2025, 6, 1), 35),
-                new DateTimePoint(new DateTime(2025, 7, 1), 38),
-                new DateTimePoint(new DateTime(2025, 8, 1), 36),
-                new DateTimePoint(new DateTime(2025, 9, 1), 28),
-                new DateTimePoint(new DateTime(2025, 10, 1), 18),
-                new DateTimePoint(new DateTime(2025, 11, 1), 10),
-                new DateTimePoint(new DateTime(2025, 12, 1), 4)
-            };
-            
-            // District Heating data
-            var districtHeatingValues = new ObservableCollection<DateTimePoint>
-            {
-                new DateTimePoint(new DateTime(2025, 1, 1), 25),
-                new DateTimePoint(new DateTime(2025, 2, 1), 22),
-                new DateTimePoint(new DateTime(2025, 3, 1), 18),
-                new DateTimePoint(new DateTime(2025, 4, 1), 15),
-                new DateTimePoint(new DateTime(2025, 5, 1), 10),
-                new DateTimePoint(new DateTime(2025, 6, 1), 5),
-                new DateTimePoint(new DateTime(2025, 7, 1), 3),
-                new DateTimePoint(new DateTime(2025, 8, 1), 4),
-                new DateTimePoint(new DateTime(2025, 9, 1), 8),
-                new DateTimePoint(new DateTime(2025, 10, 1), 12),
-                new DateTimePoint(new DateTime(2025, 11, 1), 18),
-                new DateTimePoint(new DateTime(2025, 12, 1), 24)
-            };
-
-            // Create the area series with styling
-            HeatProductionSeries = new ObservableCollection<ISeries>
-            {
-                new StackedAreaSeries<DateTimePoint>
-                {
-                    Name = "Gas Boiler 1",
-                    Values = heatPumpValues,
-                    Stroke = new SolidColorPaint(SKColors.MediumSeaGreen),
-                    Fill = new SolidColorPaint(SKColors.MediumSeaGreen.WithAlpha(150)),
-                    GeometrySize = 0,
-                    LineSmoothness = 0.5,
-                    TooltipLabelFormatter = point => $"{((DateTimePoint)point.Model).DateTime:MMM yyyy}: {((DateTimePoint)point.Model).Value} MWh"
-                },
-                new StackedAreaSeries<DateTimePoint>
-                {
-                    Name = "Gas Boiler 2",
-                    Values = gasBoilerValues,
-                    Stroke = new SolidColorPaint(SKColors.OrangeRed),
-                    Fill = new SolidColorPaint(SKColors.OrangeRed.WithAlpha(150)),
-                    GeometrySize = 0, // No points on the line
-                    LineSmoothness = 0.5,
-                    TooltipLabelFormatter = point => $"{((DateTimePoint)point.Model).DateTime:MMM yyyy}: {((DateTimePoint)point.Model).Value} MWh"
-                },
-                new StackedAreaSeries<DateTimePoint>
-                {
-                    Name = "Oil Boiler",
-                    Values = electricBoilerValues,
-                    Stroke = new SolidColorPaint(SKColors.RoyalBlue),
-                    Fill = new SolidColorPaint(SKColors.RoyalBlue.WithAlpha(150)),
-                    GeometrySize = 0,
-                    LineSmoothness = 0.5,
-                    TooltipLabelFormatter = point => $"{((DateTimePoint)point.Model).DateTime:MMM yyyy}: {((DateTimePoint)point.Model).Value} MWh"
-                },
-                new StackedAreaSeries<DateTimePoint>
-                {
-                    Name = "Gas Motor",
-                    Values = solarThermalValues,
-                    Stroke = new SolidColorPaint(SKColors.Gold),
-                    Fill = new SolidColorPaint(SKColors.Gold.WithAlpha(150)),
-                    GeometrySize = 0,
-                    LineSmoothness = 0.5,
-                    TooltipLabelFormatter = point => $"{((DateTimePoint)point.Model).DateTime:MMM yyyy}: {((DateTimePoint)point.Model).Value} MWh"
-                },
-                new StackedAreaSeries<DateTimePoint>
-                {
-                    Name = "Heat Pump",
-                    Values = districtHeatingValues,
-                    Stroke = new SolidColorPaint(SKColors.Purple),
-                    Fill = new SolidColorPaint(SKColors.Purple.WithAlpha(150)),
-                    GeometrySize = 0,
-                    LineSmoothness = 0.5,
-                    TooltipLabelFormatter = point => $"{((DateTimePoint)point.Model).DateTime:MMM yyyy}: {((DateTimePoint)point.Model).Value} MWh"
-                }
-            };
-
-            // Configure the X-axis (time axis)
-            HeatProductionXAxes = new List<Axis>
-            {
-                new Axis
-                {
-                    // Name = "Month",
-                    NamePaint = new SolidColorPaint(SKColors.Black),
-                    LabelsPaint = new SolidColorPaint(SKColors.DarkSlateGray),
-                    TextSize = 12,
-                    Labeler = value => new DateTime((long)value).ToString("MMM"),
-                    UnitWidth = TimeSpan.FromDays(30).Ticks,
-                    MinStep = TimeSpan.FromDays(30).Ticks
-                }
-            };
-
-            // Configure the Y-axis
-            HeatProductionYAxes = new List<Axis>
-            {
-                new Axis
-                {
-                    // Name = "Heat Production (MWh)",
-                    NamePaint = new SolidColorPaint(SKColors.Black),
-                    LabelsPaint = new SolidColorPaint(SKColors.DarkSlateGray),
-                    TextSize = 12,
-                    MinLimit = 0, // Start Y-axis at 0
-                    Labeler = value => $"{value} MWh"
-                }
-            };
+            unitHeatProduction[unitName] = 0;
         }
+        
+        // Calculate heat production for each unit in this period
+        foreach (var unit in period.ProductionUnitsUsed)
+        {
+            // Find how much heat this unit produced in this period
+            // We need to calculate this based on the optimization logic
+            var unitHeat = CalculateUnitHeatProduction(unit, period);
+            unitHeatProduction[unit.Name] = unitHeat;
+        }
+        
+        // Add data points for each unit
+        foreach (var unitName in allUnits)
+        {
+            unitDataSeries[unitName].Add(new DateTimePoint(pointTime, unitHeatProduction[unitName]));
+        }
+    }
+    
+    // Define colors for each unit type
+    var unitColors = new Dictionary<string, SKColor>
+    {
+        { "Gas Boiler 1", SKColors.MediumSeaGreen },
+        { "Gas Boiler 2", SKColors.OrangeRed },
+        { "Oil Boiler 1", SKColors.RoyalBlue },
+        { "Gas Motor 1", SKColors.Gold },
+        { "Heat Pump 1", SKColors.Purple }
+    };
+    
+    // Create the series collection
+    HeatProductionSeries = new ObservableCollection<ISeries>();
+    
+    // Add a series for each production unit
+    foreach (var unitName in allUnits)
+    {
+        // Get color for this unit (or default if not found)
+        var unitColor = unitColors.ContainsKey(unitName) 
+            ? unitColors[unitName] 
+            : SKColors.Gray;
+            
+        HeatProductionSeries.Add(
+            new StackedAreaSeries<DateTimePoint>
+            {
+                Name = unitName,
+                Values = unitDataSeries[unitName],
+                Stroke = new SolidColorPaint(unitColor),
+                Fill = new SolidColorPaint(unitColor.WithAlpha(150)),
+                GeometrySize = 0,
+                LineSmoothness = 0.5,
+                TooltipLabelFormatter = point => $"{((DateTimePoint)point.Model).DateTime:g}: {((DateTimePoint)point.Model).Value:F2} MW"
+            }
+        );
+    }
+    
+    // Configure the X-axis (time axis) with improved formatting
+    HeatProductionXAxes = new List<Axis>
+    {
+        new Axis
+        {
+            Name = "",
+            NamePaint = new SolidColorPaint(SKColors.Black),
+            LabelsPaint = new SolidColorPaint(SKColors.DarkSlateGray),
+            TextSize = 12,
+            Labeler = value => new DateTime((long)value).ToString("M/d HH:mm"),
+            UnitWidth = TimeSpan.FromHours(12).Ticks,
+            MinStep = TimeSpan.FromHours(12).Ticks,
+            LabelsRotation = 45,
+            SeparatorsPaint = new SolidColorPaint(SKColors.LightGray.WithAlpha(100)) { StrokeThickness = 1 }
+        }
+    };
+    
+    // Configure the Y-axis with improved formatting
+    HeatProductionYAxes = new List<Axis>
+    {
+        new Axis
+        {
+            Name = "",
+            NamePaint = new SolidColorPaint(SKColors.Black),
+            LabelsPaint = new SolidColorPaint(SKColors.DarkSlateGray),
+            TextSize = 12,
+            MinLimit = 0, // Start Y-axis at 0
+            SeparatorsPaint = new SolidColorPaint(SKColors.LightGray.WithAlpha(100)) { StrokeThickness = 1 },
+            Labeler = value => $"{value:F1} MW"
+        }
+    };
+    
+    // Notify that the chart data has changed
+    OnPropertyChanged(nameof(HeatProductionSeries));
+    OnPropertyChanged(nameof(HeatProductionXAxes));
+    OnPropertyChanged(nameof(HeatProductionYAxes));
+}
+
+// Helper method to calculate how much heat a unit produced in a given period
+private double CalculateUnitHeatProduction(ProductionUnit unit, ResultData period)
+{
+    // For Scenario2, we need to calculate based on the optimization logic in Optimizer.cs
+    // This is a simplified version of the calculation
+    
+    double targetHeatDemand = period.HeatProduction;
+    double unitHeat = 0;
+    
+    // If this unit is in the list of units used, calculate its contribution
+    if (period.ProductionUnitsUsed.Any(u => u.Name == unit.Name))
+    {
+        // Get all units used in this period, ordered by their position in the list
+        // This approximates the order they were used in the optimization
+        var usedUnits = period.ProductionUnitsUsed;
+        
+        // Find the index of this unit in the list
+        int unitIndex = usedUnits.FindIndex(u => u.Name == unit.Name);
+        
+        // Calculate how much heat was produced by units before this one
+        double heatProducedBefore = 0;
+        for (int i = 0; i < unitIndex; i++)
+        {
+            heatProducedBefore += Math.Min(usedUnits[i].MaxHeat, targetHeatDemand - heatProducedBefore);
+        }
+        
+        // Calculate how much heat this unit produced
+        unitHeat = Math.Min(unit.MaxHeat, targetHeatDemand - heatProducedBefore);
+    }
+    
+    return unitHeat;
+}
 
         #endregion
     }

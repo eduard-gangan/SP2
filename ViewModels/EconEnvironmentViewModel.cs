@@ -5,6 +5,9 @@ using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using SkiaSharp;
+using SP2.Models;
+using SP2.Services;
+using System.Linq;
 
 namespace SP2.ViewModels
 {
@@ -18,6 +21,10 @@ namespace SP2.ViewModels
 
         public EconEnvironmentViewModel()
         {
+            // Run optimizations to ensure data is available
+            Optimiser.OptimizeScenario1();
+            Optimiser.OptimizeScenario2();
+            
             // Initialize the chart data
             UpdateChartData();
         }
@@ -174,40 +181,47 @@ namespace SP2.ViewModels
             // Choose the appropriate data set based on selected scenario
             if (_selectedScenario == "Scenario 1")
             {
-                InitializeScenario1Charts();
+                InitializeScenarioCharts("Scenario1");
             }
             else
             {
-                InitializeScenario2Charts();
+                InitializeScenarioCharts("Scenario2");
             }
         }
 
-        private void InitializeScenario1Charts()
+        private void InitializeScenarioCharts(string scenarioKey)
         {
-            // Scenario 1: 2 gas boilers and 1 oil boiler
+            // Get real data from ResultDataManager
+            var winterData = ResultDataManager.GetWinterOptimizedData(scenarioKey);
+            var summerData = ResultDataManager.GetSummerOptimizedData(scenarioKey);
             
-            // Production Costs data
-            var productionCostsValues = new List<double> { 75, 80, 95 };
-            var productionCostsLabels = new List<string> { "Gas Boiler 1", "Gas Boiler 2", "Oil Boiler" };
-            
-            // CO2 Emissions data
-            var co2EmissionsValues = new List<double> { 200, 210, 280 };
-            
-            // Initialize the charts with the data
-            InitializeProductionCostsChart(productionCostsValues, productionCostsLabels);
-            InitializeCO2EmissionsChart(co2EmissionsValues, productionCostsLabels);
-        }
+            if (winterData == null || summerData == null || winterData.Count == 0 || summerData.Count == 0)
+            {
+                // Fallback to empty data if optimization results aren't available
+                ProductionCostsSeries = new ObservableCollection<ISeries>();
+                CO2EmissionsSeries = new ObservableCollection<ISeries>();
+                return;
+            }
 
-        private void InitializeScenario2Charts()
-        {
-            // Scenario 2: 1 gas boiler, 1 oil boiler, 1 gas motor, 1 heat pump
-            
+            // Get production units used in each time period
+            var allUnits = new List<ProductionUnit>();
+            foreach (var result in winterData.Concat(summerData))
+            {
+                foreach (var unit in result.ProductionUnitsUsed)
+                {
+                    if (!allUnits.Any(u => u.Name == unit.Name))
+                    {
+                        allUnits.Add(unit);
+                    }
+                }
+            }
+
             // Production Costs data
-            var productionCostsValues = new List<double> { 70, 90, 85, 55 };
-            var productionCostsLabels = new List<string> { "Gas Boiler", "Oil Boiler", "Gas Motor", "Heat Pump" };
+            var productionCostsValues = allUnits.Select(unit => unit.ProductionCosts).ToList();
+            var productionCostsLabels = allUnits.Select(unit => unit.Name).ToList();
             
             // CO2 Emissions data
-            var co2EmissionsValues = new List<double> { 195, 275, 180, 90 };
+            var co2EmissionsValues = allUnits.Select(unit => unit.CO2Emissions).ToList();
             
             // Initialize the charts with the data
             InitializeProductionCostsChart(productionCostsValues, productionCostsLabels);
@@ -226,7 +240,7 @@ namespace SP2.ViewModels
                     Fill = new SolidColorPaint(SKColors.DodgerBlue),
                     Stroke = null,
                     MaxBarWidth = 40,
-                    TooltipLabelFormatter = point => $"{labels[(int)point.Context.Index]}: {point.PrimaryValue} €/MWh"
+                    TooltipLabelFormatter = point => $"{labels[(int)point.Context.Index]}: {point.PrimaryValue} DKK/MWh"
                 }
             };
 
@@ -251,7 +265,7 @@ namespace SP2.ViewModels
                     LabelsPaint = new SolidColorPaint(SKColors.DarkSlateGray),
                     TextSize = 12,
                     MinLimit = 0, // Start Y-axis at 0
-                    Labeler = value => $"{value} €/MWh"
+                    Labeler = value => $"{value} DKK/MWh"
                 }
             };
         }
@@ -268,7 +282,7 @@ namespace SP2.ViewModels
                     Fill = new SolidColorPaint(SKColors.OrangeRed),
                     Stroke = null,
                     MaxBarWidth = 40,
-                    TooltipLabelFormatter = point => $"{labels[(int)point.Context.Index]}: {point.PrimaryValue} kg CO2/MWh"
+                    TooltipLabelFormatter = point => $"{labels[(int)point.Context.Index]}: {point.PrimaryValue} tons CO2/MWh"
                 }
             };
 
@@ -293,7 +307,7 @@ namespace SP2.ViewModels
                     LabelsPaint = new SolidColorPaint(SKColors.DarkSlateGray),
                     TextSize = 12,
                     MinLimit = 0, // Start Y-axis at 0
-                    Labeler = value => $"{value} kg CO2/MWh"
+                    Labeler = value => $"{value} tons CO2/MWh"
                 }
             };
         }
