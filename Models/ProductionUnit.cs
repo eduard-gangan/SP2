@@ -20,6 +20,7 @@ namespace SP2.Models
         public UnitType Type { get; }
         public double ElectricityProduction { get; }
         public double ElectricityConsumption { get; }
+        public bool IsAvailable { get; set; }
 
         public ProductionUnit(
             string name, 
@@ -32,7 +33,8 @@ namespace SP2.Models
             string fuelType,
             UnitType type,
             double electricityProduction = 0,
-            double electricityConsumption = 0)
+            double electricityConsumption = 0,
+            bool isAvailable = true)
         {
             Name = name;
             ImagePath = imagePath;
@@ -45,6 +47,7 @@ namespace SP2.Models
             Type = type;
             ElectricityProduction = electricityProduction;
             ElectricityConsumption = electricityConsumption;
+            IsAvailable = isAvailable;
         }
     }
 }

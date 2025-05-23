@@ -35,6 +35,14 @@ namespace SP2.Services
         {
             return _productionUnits.FirstOrDefault(x => x.Name == name);
         }
+        public static void SetProdUnit(string name, bool isAvailable)
+        {
+            var unit = GetProdUnit(name);
+            if (unit != null)
+            {
+                unit.IsAvailable = isAvailable;
+            }
+        }
         public static HeatGrid GetHeatGrid()
         {
             return HeatGrid;

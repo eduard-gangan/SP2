@@ -13,11 +13,10 @@ namespace SP2.Services
     {
         private static readonly List<TimeSeriesData> CSVData = SourceDataManager.LoadData("Assets/2025 Heat Production Optimization - Danfoss Deliveries - Source Data Manager.csv");
         //private static readonly List<TimeSeriesData> CSVData = SourceDataManager.LoadData("/Users/davidskorepa/Desktop/ProjectWork/SP2/Assets/2025 Heat Production Optimization - Danfoss Deliveries - Source Data Manager.csv");
-        private static readonly List<ProductionUnit> ProductionUnits1 = AssetManager.GetProdUnits();
-        private static readonly List<ProductionUnit> ProductionUnits2 = AssetManager.GetProdUnits().Where(p => p.Name != "Gas Boiler 2").ToList();
 
         public static void OptimizeScenario1()
         {
+            List<ProductionUnit> ProductionUnits = AssetManager.GetProdUnits().Where(p => p.Name != "Gas Motor 1" || p.Name != "Heat Pump 1").ToList();
             Console.WriteLine("\n=== Starting Scenario 1 Optimization ===");
             
             if (CSVData == null || !CSVData.Any())
@@ -27,7 +26,7 @@ namespace SP2.Services
             }
 
             Console.WriteLine($"Loaded {CSVData.Count} time series data points");
-            Console.WriteLine($"Available production units: {ProductionUnits1.Count}");
+            Console.WriteLine($"Available production units: {ProductionUnits.Count}");
             
             bool isWinter = true;
             
@@ -48,7 +47,13 @@ namespace SP2.Services
                 int UnitIndex = 0;
                 while (TargetHeatDemand > 0)
                 {
-                    ProductionUnit productionUnit = ProductionUnits1[UnitIndex];
+                    ProductionUnit productionUnit = ProductionUnits[UnitIndex];
+                    if (!productionUnit.IsAvailable)
+                    {
+                        Console.WriteLine($"Unit {productionUnit.Name} is not available.");
+                        UnitIndex++;
+                        continue;
+                    }
                     Console.WriteLine($"\nUsing unit: {productionUnit.Name}");
                     Console.WriteLine($"Unit type: {productionUnit.Type}, Fuel: {productionUnit.FuelType}");
                     Console.WriteLine($"Max heat: {productionUnit.MaxHeat} MW");
@@ -124,13 +129,13 @@ namespace SP2.Services
 
         public static void OptimizeScenario2()
         {
+            List<ProductionUnit> productionUnits = AssetManager.GetProdUnits().Where(p => p.Name != "Gas Boiler 2").ToList();
             Console.WriteLine("\n=== Starting Scenario 2 Optimization ===");
             
             bool isSummer = false;
             bool minimizeCO2 = true;
 
             Dictionary<string, double> netCosts = new Dictionary<string, double>();
-            List<ProductionUnit> productionUnits = ProductionUnits2;
 
             Console.WriteLine($"Available production units: {productionUnits.Count}");
 
@@ -198,6 +203,11 @@ namespace SP2.Services
                 Console.WriteLine("\nOptimizing production:");
                 foreach (var unit in sortedUnits)
                 {
+                    if (!unit.IsAvailable)
+                    {
+                        Console.WriteLine($"Unit {unit.Name} is not available.");
+                        continue;
+                    }
                     if (targetHeatDemand <= 0) break;
     
                     double heatToProduce = Math.Min(unit.MaxHeat, targetHeatDemand);
