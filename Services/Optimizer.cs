@@ -127,6 +127,8 @@ namespace SP2.Services
             Console.WriteLine("\n=== Starting Scenario 2 Optimization ===");
             
             bool isSummer = false;
+            bool minimizeCO2 = true;
+
             Dictionary<string, double> netCosts = new Dictionary<string, double>();
             List<ProductionUnit> productionUnits = ProductionUnits2;
 
@@ -182,6 +184,10 @@ namespace SP2.Services
 
                 // Sort units from lowest to highest net cost
                 var sortedUnits = productionUnits.OrderBy(u => netCosts[u.Name]).ToList();
+                if (minimizeCO2 && data.ElectricityPrice <= 800.0)
+                {
+                    sortedUnits = sortedUnits.OrderBy(u => u.CO2Emissions).ToList();
+                } 
                 Console.WriteLine("\nUnits sorted by net cost (lowest to highest):");
                 foreach (var unit in sortedUnits)
                 {

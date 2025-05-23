@@ -18,7 +18,7 @@ namespace SP2.Services
         {
             var records = new List<TimeSeriesData>();
             
-            using var reader = new StreamReader(csvPath);
+            using var reader = new StreamReader(Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "../../../" + csvPath));
             using var csv = new CsvReader(reader, new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 HasHeaderRecord = false,

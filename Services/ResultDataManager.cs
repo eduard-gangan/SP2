@@ -92,6 +92,30 @@ namespace SP2.Services
             }
         }
 
+        public static double GetCO2Emissions(string scenario)
+        {
+            if (scenario == "Scenario1")
+            {
+                return WinterOptimizedData1.Sum(x => x.CO2Emissions);
+            }
+            else
+            {
+                return WinterOptimizedData2.Sum(x => x.CO2Emissions);
+            }
+        }
+        
+        public static double GetExpenses(string scenario)
+        {
+            if (scenario == "Scenario1")
+            {
+                return WinterOptimizedData1.Sum(x => x.Expenses);
+            }
+            else
+            {
+                return WinterOptimizedData2.Sum(x => x.Expenses);
+            }
+        }
+
         public static void ClearData()
         {
             WinterOptimizedData1.Clear();

@@ -17,8 +17,27 @@ class Program
     [STAThread]
     public static void Main(string[] args)
     {
-        Optimiser.OptimizeScenario1();
-        Optimiser.OptimizeScenario2();
+        //ignoring co2 emission
+        //1,717,833.8199999998
+        //927,458.89999999991
+
+        //considering co2 emissions below a certain electricity price range
+        //below 700
+        //1,661,440.0399999998
+        //652,385.8
+
+        //below 800
+        //1,665,591.159999999
+        //510,935.89999999997
+
+        //below 900
+        //1,688,487.0799999994
+        //424,070.8
+
+        //below 880.01 (average electricity price)
+        //1,679,298.2399999993
+        //451,195.8
+
         BuildAvaloniaApp()
             .StartWithClassicDesktopLifetime(args);
     }
