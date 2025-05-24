@@ -7,165 +7,154 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SP2.Views.Heat"
              x:DataType="vm:HeatViewModel">
-   <Grid  
-        HorizontalAlignment="Left"
-        MinWidth="1000"
-    >
-         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="356"/>
-            <RowDefinition Height="356"/>
-        </Grid.RowDefinitions>
-        
-        <!-- Season Selection Dropdown -->
-        <Grid 
-            Margin="28,10,28,10" 
-            Grid.Row="0"
-            ColumnDefinitions="*,Auto">
-            <TextBlock 
-                Grid.Column="0"
-                Text="Heat Data Visualization" 
-                FontSize="28"
-                FontWeight="Bold"
-                Foreground="Black"
-                VerticalAlignment="Center"/>
-            <StackPanel 
-                Grid.Column="1" 
-                Orientation="Horizontal" 
-                VerticalAlignment="Center"
-                Spacing="16">
-                <!-- Season Selection -->
-                <StackPanel 
-                    Orientation="Horizontal" 
-                    VerticalAlignment="Center">
-                    <TextBlock 
-                        Text="Season:" 
-                        VerticalAlignment="Center"
-                        Margin="0,0,8,0"
-                        FontSize="16"
-                        Foreground="Black"/>
-                    <Border
-                        BorderBrush="#CBD5E1"
-                        BorderThickness="1"
-                        CornerRadius="8"
-                        Background="White">
-                        <ComboBox 
-                            Width="120"
-                            ItemsSource="{Binding AvailableSeasons}"
-                            SelectedItem="{Binding SelectedSeason}"
-                            Background="White"
-                            Foreground="Black"
-                            Padding="8,4"
-                            BorderThickness="0"
-                            CornerRadius="8"/>
-                    </Border>
+    
+    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+        <Grid HorizontalAlignment="Stretch" MinWidth="1000" MinHeight="800">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="400"/>
+                <RowDefinition Height="400"/>
+            </Grid.RowDefinitions>
+           
+            <!-- Header with Season/Scenario Selection -->
+            <Grid Margin="28,10,28,20" Grid.Row="0" ColumnDefinitions="*,Auto">
+                <TextBlock
+                    Grid.Column="0"
+                    Text="Heat Data Visualization"
+                    FontSize="28"
+                    FontWeight="Bold"
+                    Foreground="Black"
+                    VerticalAlignment="Center"/>
+                    
+                <StackPanel
+                    Grid.Column="1"
+                    Orientation="Horizontal"
+                    VerticalAlignment="Center"
+                    Spacing="16">
+                    
+                    <!-- Season Selection -->
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock
+                            Text="Season:"
+                            VerticalAlignment="Center"
+                            Margin="0,0,8,0"
+                            FontSize="16"
+                            Foreground="Black"/>
+                        <Border
+                            BorderBrush="#CBD5E1"
+                            BorderThickness="1"
+                            CornerRadius="8"
+                            Background="White">
+                            <ComboBox
+                                Width="120"
+                                ItemsSource="{Binding AvailableSeasons}"
+                                SelectedItem="{Binding SelectedSeason}"
+                                Background="White"
+                                Foreground="Black"
+                                Padding="8,4"
+                                BorderThickness="0"
+                                CornerRadius="8"/>
+                        </Border>
+                    </StackPanel>
+                   
+                    <!-- Scenario Selection -->
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock
+                            Text="Scenario:"
+                            VerticalAlignment="Center"
+                            Margin="0,0,8,0"
+                            FontSize="16"
+                            Foreground="Black"/>
+                        <Border
+                            BorderBrush="#CBD5E1"
+                            BorderThickness="1"
+                            CornerRadius="8"
+                            Background="White">
+                            <ComboBox
+                                Width="120"
+                                ItemsSource="{Binding AvailableScenarios}"
+                                SelectedItem="{Binding SelectedScenario}"
+                                Background="White"
+                                Foreground="Black"
+                                Padding="8,4"
+                                BorderThickness="0"
+                                CornerRadius="8"/>
+                        </Border>
+                    </StackPanel>
                 </StackPanel>
+            </Grid>
+            
+            <!-- Heat Demand Chart -->
+            <Border
+                BorderBrush="#CBD5E1"
+                BorderThickness="1"
+                CornerRadius="12"
+                Padding="24"
+                Margin="28,0,28,20"
+                Grid.Row="1"
+                Background="White">
                 
-                <!-- Scenario Selection -->
-                <StackPanel 
-                    Orientation="Horizontal" 
-                    VerticalAlignment="Center">
-                    <TextBlock 
-                        Text="Scenario:" 
-                        VerticalAlignment="Center"
-                        Margin="0,0,8,0"
-                        FontSize="16"
-                        Foreground="Black"/>
-                    <Border
-                        BorderBrush="#CBD5E1"
-                        BorderThickness="1"
-                        CornerRadius="8"
-                        Background="White">
-                        <ComboBox 
-                            Width="120"
-                            ItemsSource="{Binding AvailableScenarios}"
-                            SelectedItem="{Binding SelectedScenario}"
-                            Background="White"
-                            Foreground="Black"
-                            Padding="8,4"
-                            BorderThickness="0"
-                            CornerRadius="8"/>
-                    </Border>
-                </StackPanel>
-            </StackPanel>
+                <Grid RowDefinitions="Auto,*">
+                    <TextBlock
+                        Grid.Row="0"
+                        Text="Heat Demand"
+                        FontSize="24"
+                        FontWeight="Bold"
+                        Foreground="Black"
+                        Margin="0,0,0,16"
+                        HorizontalAlignment="Left"/>
+                   
+                    <lvc:CartesianChart
+                        Grid.Row="1"
+                        Name="HeatDemandChart"
+                        Series="{Binding HeatDemandSeries}"
+                        XAxes="{Binding HeatDemandXAxes}"
+                        YAxes="{Binding HeatDemandYAxes}"
+                        TooltipPosition="Top"
+                        AnimationsSpeed="00:00:00.300"
+                        LegendPosition="Right"
+                        MinHeight="300"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch">
+                    </lvc:CartesianChart>
+                </Grid>
+            </Border>
+            
+            <!-- Heat Production Chart -->
+            <Border
+                BorderBrush="#CBD5E1"
+                BorderThickness="1"
+                CornerRadius="12"
+                Padding="24"
+                Margin="28,0,28,20"
+                Grid.Row="2"
+                Background="White">
+                
+                <Grid RowDefinitions="Auto,*">
+                    <TextBlock
+                        Grid.Row="0"
+                        Text="{Binding HeatProductionTitle}"
+                        FontSize="24"
+                        FontWeight="Bold"
+                        Foreground="Black"
+                        Margin="0,0,0,16"
+                        HorizontalAlignment="Left"/>
+                   
+                    <lvc:CartesianChart
+                        Grid.Row="1"
+                        Name="HeatProductionChart"
+                        Series="{Binding HeatProductionSeries}"
+                        XAxes="{Binding HeatProductionXAxes}"
+                        YAxes="{Binding HeatProductionYAxes}"
+                        TooltipPosition="Top"
+                        AnimationsSpeed="00:00:00.300"
+                        LegendPosition="Right"
+                        MinHeight="300"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch">
+                    </lvc:CartesianChart>
+                </Grid>
+            </Border>
         </Grid>
-        <Border
-            BorderBrush="#CBD5E1"
-            BorderThickness="1"
-            CornerRadius="12"
-            Padding="24"
-            Margin="28,0,28,28"
-            Grid.Row="1"
-        >
-            <Grid RowDefinitions="Auto,*">
-                <TextBlock 
-                    Grid.Row="0"
-                    Text="Heat Demand" 
-                    FontSize="28"
-                    FontWeight="Bold"
-                    Foreground="Black"
-                    Margin="0,0,0,16"
-                />
-                
-                <!-- 
-                    Key Properties Explained:
-                    - Series: Collection of data series to display on the chart
-                    - XAxes/YAxes: Define the appearance and behavior of the axes
-                    - TooltipPosition: Controls where tooltips appear when hovering over data points
-                    - AnimationsSpeed: Duration of animations in milliseconds
-                    - LegendPosition: Position of the legend relative to the chart
-                    - DrawMarginFrame: Draws a frame around the chart area
-                -->
-                <lvc:CartesianChart
-                    Grid.Row="1"
-                    Series="{Binding HeatDemandSeries}"
-                    XAxes="{Binding HeatDemandXAxes}"
-                    YAxes="{Binding HeatDemandYAxes}"
-                    TooltipPosition="Top"
-                    AnimationsSpeed="00:00:00.500"
-                    LegendPosition="Right"
-                    Height="300">
-                </lvc:CartesianChart>
-            </Grid>
-        </Border>
-        <Border
-            BorderBrush="#CBD5E1"
-            BorderThickness="1"
-            CornerRadius="12"
-            Padding="24"
-            Margin="28,0,28,28"
-            Grid.Row="2"
-        >
-            <Grid RowDefinitions="Auto,*">
-                <TextBlock 
-                    Grid.Row="0"
-                    Text="{Binding HeatProductionTitle}" 
-                    FontSize="28"
-                    FontWeight="Bold"
-                    Foreground="Black"
-                    Margin="0,0,0,16"
-                />
-                
-                <!-- 
-                    Key Properties Explained:
-                    - Series: Collection of data series to display on the chart
-                    - XAxes/YAxes: Define the appearance and behavior of the axes
-                    - TooltipPosition: Controls where tooltips appear when hovering over data points
-                    - AnimationsSpeed: Duration of animations in milliseconds
-                    - LegendPosition: Position of the legend relative to the chart
-                    - DrawMarginFrame: Draws a frame around the chart area
-                -->
-                <lvc:CartesianChart
-                    Grid.Row="1"
-                    Series="{Binding HeatProductionSeries}"
-                    XAxes="{Binding HeatProductionXAxes}"
-                    YAxes="{Binding HeatProductionYAxes}"
-                    TooltipPosition="Top"
-                    AnimationsSpeed="00:00:00.500"
-                    LegendPosition="Right"
-                    Height="300">
-                </lvc:CartesianChart>
-            </Grid>
-        </Border>
-    </Grid>
+    </ScrollViewer>
 </UserControl>

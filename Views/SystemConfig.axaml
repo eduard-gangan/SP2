@@ -30,8 +30,8 @@
                 />
                 <Grid Margin="0,60,0,0">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="210"/>
-                        <RowDefinition Height="210"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="300"/>
