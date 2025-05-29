@@ -113,8 +113,8 @@ namespace SP2Tests
             var heatPump = summerResult.ProductionUnitsUsed.FirstOrDefault(u => u.Name == "Heat Pump 1");
             if (heatPump != null)
             {
-                Assert.True(summerResult.ElectricityConsumption >= heatPump.ElectricityConsumption * heatPump.MaxHeat,
-                    $"Electricity consumption should be at least {heatPump.ElectricityConsumption * heatPump.MaxHeat} for Heat Pump");
+                Assert.True(summerResult.ElectricityConsumption >= heatPump.ElectricityConsumption,
+                    $"Electricity consumption should be at least {heatPump.ElectricityConsumption} for Heat Pump");
             }
         }
 

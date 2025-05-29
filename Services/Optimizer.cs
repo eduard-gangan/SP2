@@ -21,6 +21,7 @@ namespace SP2.Services
                 Console.WriteLine("Winter optimized data for Scenario 1 already exists. Skipping optimization.");
                 return;
             }
+
             List<ProductionUnit> ProductionUnits = AssetManager.GetProdUnits().Where(p => p.Name != "Gas Motor 1" || p.Name != "Heat Pump 1").ToList();
             Console.WriteLine("\n=== Starting Scenario 1 Optimization ===");
             
@@ -139,6 +140,7 @@ namespace SP2.Services
                 Console.WriteLine("Winter optimized data for Scenario 2 already exists. Skipping optimization.");
                 return;
             }
+
             List<ProductionUnit> productionUnits = AssetManager.GetProdUnits().Where(p => p.Name != "Gas Boiler 2").ToList();
             Console.WriteLine("\n=== Starting Scenario 2 Optimization ===");
             

@@ -10,7 +10,7 @@ namespace SP2Tests
         public void LoadData_ShouldReturnFirstRecord_WhenCsvIsValid()
         {
             // Arrange
-            var tempFilePath = "../../../../Assets/2025 Heat Production Optimization - Danfoss Deliveries - Source Data Manager.csv";
+            var tempFilePath = "../Assets/2025 Heat Production Optimization - Danfoss Deliveries - Source Data Manager.csv";
 
             // Act
             var records = SourceDataManager.LoadData(tempFilePath);
@@ -26,7 +26,7 @@ namespace SP2Tests
         public void LoadData_ShouldReturnLastRecord_WhenCsvIsValid()
         {
             // Arrange
-            var tempFilePath = "../../../../Assets/2025 Heat Production Optimization - Danfoss Deliveries - Source Data Manager.csv";
+            var tempFilePath = "../Assets/2025 Heat Production Optimization - Danfoss Deliveries - Source Data Manager.csv";
 
             // Act
             var records = SourceDataManager.LoadData(tempFilePath);
