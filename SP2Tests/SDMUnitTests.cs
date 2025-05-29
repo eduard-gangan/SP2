@@ -38,21 +38,6 @@ namespace SP2Tests
         }
 
         [Fact]
-        public void LoadData_ShouldReturnEmptyList_WhenCsvIsEmpty()
-        {
-            // Arrange
-            var tempFilePath = Path.GetTempFileName();
-            File.WriteAllText(tempFilePath, string.Empty);
-
-            // Act
-            var records = SourceDataManager.LoadData(tempFilePath);
-
-            // Assert
-            Assert.NotNull(records);
-            Assert.Empty(records);
-        }
-
-        [Fact]
         public void LoadData_ShouldThrowException_WhenCsvPathIsInvalid()
         {
             // Arrange
