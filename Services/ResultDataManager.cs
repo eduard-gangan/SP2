@@ -116,6 +116,47 @@ namespace SP2.Services
             }
         }
 
+        public static void SaveDataToCSV(int scenario)
+        {
+            string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+            string directory = Path.Combine(baseDir, "../../../", "SavedData");
+            if (!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+            
+            if (scenario == 1)
+            {
+                using (var writer = new StreamWriter(Path.Combine(directory, "WinterOptimizedData1.csv")))
+                using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+                {
+                    csv.Context.RegisterClassMap<ResultDataMap1>();
+                    csv.WriteRecords(WinterOptimizedData1);
+                }
+                using (var writer = new StreamWriter(Path.Combine(directory, "SummerOptimizedData1.csv")))
+                using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+                {
+                    csv.Context.RegisterClassMap<ResultDataMap1>();
+                    csv.WriteRecords(SummerOptimizedData1);
+                }
+            }
+            else if (scenario == 2)
+            {
+                using (var writer = new StreamWriter(Path.Combine(directory, "WinterOptimizedData2.csv")))
+                using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+                {
+                    csv.Context.RegisterClassMap<ResultDataMap2>();
+                    csv.WriteRecords(WinterOptimizedData2);
+                }
+                using (var writer = new StreamWriter(Path.Combine(directory, "SummerOptimizedData2.csv")))
+                using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+                {
+                    csv.Context.RegisterClassMap<ResultDataMap2>();
+                    csv.WriteRecords(SummerOptimizedData2);
+                }
+            }
+        }
+
         public static void ClearData()
         {
             WinterOptimizedData1.Clear();

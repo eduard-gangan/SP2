@@ -99,10 +99,7 @@ namespace SP2.Services
                 }
                 
                 result.HeatProduction = data.HeatDemand;
-                result.ElectricityProduction = 0;
-                result.ElectricityConsumption = 0;
                 result.Expenses = Math.Round(Expenses, 2);
-                result.Profit = 0;
                 result.GasConsumption = Math.Round(GasConsumption, 2);
                 result.OilConsumption = Math.Round(OilConsumption, 2);
                 result.CO2Emissions = Math.Round(CO2Emissions, 2);
@@ -131,6 +128,8 @@ namespace SP2.Services
                 isWinter = !isWinter;
             }
             Console.WriteLine("\n=== Scenario 1 Optimization Complete ===");
+
+            ResultDataManager.SaveDataToCSV(1);
         }
 
         public static void OptimizeScenario2()
@@ -294,6 +293,8 @@ namespace SP2.Services
                 isSummer = !isSummer;
             }
             Console.WriteLine("\n=== Scenario 2 Optimization Complete ===");
+
+            ResultDataManager.SaveDataToCSV(2);
         }
     }
 }
