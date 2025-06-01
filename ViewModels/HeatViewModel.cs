@@ -63,6 +63,27 @@ public string SelectedScenario
 // Property to hold the available scenarios
 public List<string> AvailableScenarios { get; } = new List<string> { "Scenario1", "Scenario2" };
 
+// Property to hold the CO2 optimization toggle
+private bool _isCO2OptimizationEnabled;
+public bool IsCO2OptimizationEnabled
+{
+    get => _isCO2OptimizationEnabled;
+    set
+    {
+        if (_isCO2OptimizationEnabled != value)
+        {
+            _isCO2OptimizationEnabled = value;
+            OnPropertyChanged(nameof(IsCO2OptimizationEnabled));
+            
+            // Update chart title
+            UpdateChartTitle();
+            
+            // Update charts when CO2 optimization mode changes
+            RefreshOptimizationData();
+        }
+    }
+}
+
 // Property for the Heat Production chart title
 private string _heatProductionTitle;
 public string HeatProductionTitle
@@ -81,14 +102,18 @@ public string HeatProductionTitle
 // Helper method to update the chart title
 private void UpdateChartTitle()
 {
-    HeatProductionTitle = $"Heat Production by Unit ({SelectedSeason} - {SelectedScenario})";
+    string optimizationMode = IsCO2OptimizationEnabled ? "CO2 Optimized" : "Cost Optimized";
+    HeatProductionTitle = $"Heat Production by Unit ({SelectedSeason} - {SelectedScenario} - {optimizationMode})";
 }
 
 public HeatViewModel()
 {
+    // Subscribe to production unit changes
+    AssetManager.ProductionUnitsChanged += OnProductionUnitsChanged;
+    
     // Run the optimization to generate data
-    Services.Optimiser.OptimizeScenario1();
-    Services.Optimiser.OptimizeScenario2();
+    Services.Optimiser.OptimizeScenario1(false);
+    Services.Optimiser.OptimizeScenario2(false);
     
     // Set default values
     _selectedSeason = "Winter";
@@ -98,6 +123,28 @@ public HeatViewModel()
     UpdateChartTitle();
     
     // Initialize the chart data
+    InitializeHeatDemandChart();
+    InitializeHeatProductionChart();
+}
+
+// Event handler for when production units change
+private void OnProductionUnitsChanged()
+{
+    // Refresh optimization data and charts when units are toggled
+    RefreshOptimizationData();
+}
+
+// Method to refresh optimization data and charts
+public void RefreshOptimizationData()
+{
+    // Clear existing optimization data
+    ResultDataManager.ClearData();
+    
+    // Re-run optimization with current unit availability settings and CO2 mode
+    Services.Optimiser.OptimizeScenario1(IsCO2OptimizationEnabled);
+    Services.Optimiser.OptimizeScenario2(IsCO2OptimizationEnabled);
+    
+    // Refresh the charts
     InitializeHeatDemandChart();
     InitializeHeatProductionChart();
 }

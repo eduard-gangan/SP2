@@ -32,6 +32,27 @@
                     VerticalAlignment="Center"
                     Spacing="16">
                     
+                    <!-- CO2 Optimization Toggle -->
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock
+                            Text="CO2 Optimization:"
+                            VerticalAlignment="Center"
+                            Margin="0,0,8,0"
+                            FontSize="16"
+                            Foreground="Black"/>
+                        <Border
+                            BorderBrush="#CBD5E1"
+                            BorderThickness="1"
+                            CornerRadius="8"
+                            Background="White">
+                            <CheckBox
+                                IsChecked="{Binding IsCO2OptimizationEnabled}"
+                                Content="Enable"
+                                Foreground="Black"
+                                Padding="8,4"/>
+                        </Border>
+                    </StackPanel>
+                    
                     <!-- Season Selection -->
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock

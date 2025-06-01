@@ -193,6 +193,28 @@
                                     HorizontalAlignment="Right"
                                 />
                             </Grid>
+                            <!-- Toggle Switch -->
+                            <Grid Margin="0,12,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock 
+                                    Grid.Column="0"
+                                    Text="Enabled" 
+                                    FontSize="14"
+                                    Foreground="#64748B"
+                                    VerticalAlignment="Center"
+                                />
+                                <ToggleSwitch 
+                                    Name="GasBoiler1Toggle"
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Right"
+                                    IsChecked="True"
+                                    IsCheckedChanged="ProductionUnitToggle_Toggled"
+                                    Tag="Gas Boiler 1"
+                                />
+                            </Grid>
                         </StackPanel>
                     </Border>
                     
@@ -348,6 +370,28 @@
                                     FontSize="14"
                                     Foreground="#1E293B"
                                     HorizontalAlignment="Right"
+                                />
+                            </Grid>
+                            <!-- Toggle Switch -->
+                            <Grid Margin="0,12,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock 
+                                    Grid.Column="0"
+                                    Text="Enabled" 
+                                    FontSize="14"
+                                    Foreground="#64748B"
+                                    VerticalAlignment="Center"
+                                />
+                                <ToggleSwitch 
+                                    Name="GasBoiler2Toggle"
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Right"
+                                    IsChecked="True"
+                                    IsCheckedChanged="ProductionUnitToggle_Toggled"
+                                    Tag="Gas Boiler 2"
                                 />
                             </Grid>
                         </StackPanel>
@@ -507,6 +551,28 @@
                                     HorizontalAlignment="Right"
                                 />
                             </Grid>
+                            <!-- Toggle Switch -->
+                            <Grid Margin="0,12,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock 
+                                    Grid.Column="0"
+                                    Text="Enabled" 
+                                    FontSize="14"
+                                    Foreground="#64748B"
+                                    VerticalAlignment="Center"
+                                />
+                                <ToggleSwitch 
+                                    Name="OilBoiler1Toggle"
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Right"
+                                    IsChecked="True"
+                                    IsCheckedChanged="ProductionUnitToggle_Toggled"
+                                    Tag="Oil Boiler 1"
+                                />
+                            </Grid>
                         </StackPanel>
                     </Border>
                     
@@ -664,6 +730,28 @@
                                     HorizontalAlignment="Right"
                                 />
                             </Grid>
+                            <!-- Toggle Switch -->
+                            <Grid Margin="0,12,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock 
+                                    Grid.Column="0"
+                                    Text="Enabled" 
+                                    FontSize="14"
+                                    Foreground="#64748B"
+                                    VerticalAlignment="Center"
+                                />
+                                <ToggleSwitch 
+                                    Name="GasMotor1Toggle"
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Right"
+                                    IsChecked="True"
+                                    IsCheckedChanged="ProductionUnitToggle_Toggled"
+                                    Tag="Gas Motor 1"
+                                />
+                            </Grid>
                         </StackPanel>
                     </Border>
                     
@@ -819,6 +907,28 @@
                                     FontSize="14"
                                     Foreground="#1E293B"
                                     HorizontalAlignment="Right"
+                                />
+                            </Grid>
+                            <!-- Toggle Switch -->
+                            <Grid Margin="0,12,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock 
+                                    Grid.Column="0"
+                                    Text="Enabled" 
+                                    FontSize="14"
+                                    Foreground="#64748B"
+                                    VerticalAlignment="Center"
+                                />
+                                <ToggleSwitch 
+                                    Name="HeatPump1Toggle"
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Right"
+                                    IsChecked="True"
+                                    IsCheckedChanged="ProductionUnitToggle_Toggled"
+                                    Tag="Heat Pump 1"
                                 />
                             </Grid>
                         </StackPanel>

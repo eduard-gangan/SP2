@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using Avalonia.Interactivity;
 
 namespace SP2.Views;
 
@@ -30,11 +31,40 @@ public partial class SystemConfig : UserControl
         
         // Load unit images
         LoadUnitImages();
+        
+        // Initialize toggle states
+        InitializeToggleStates();
     }
 
     private void InitializeComponent()
     {
         AvaloniaXamlLoader.Load(this);
+    }
+    
+    private void InitializeToggleStates()
+    {
+        // Get all production units and set toggle states based on their availability
+        var units = AssetManager.GetProdUnits();
+        
+        foreach (var unit in units)
+        {
+            ToggleSwitch toggle = unit.Name switch
+            {
+                "Gas Boiler 1" => this.FindControl<ToggleSwitch>("GasBoiler1Toggle"),
+                "Gas Boiler 2" => this.FindControl<ToggleSwitch>("GasBoiler2Toggle"),
+                "Oil Boiler 1" => this.FindControl<ToggleSwitch>("OilBoiler1Toggle"),
+                "Gas Motor 1" => this.FindControl<ToggleSwitch>("GasMotor1Toggle"),
+                "Heat Pump 1" => this.FindControl<ToggleSwitch>("HeatPump1Toggle"),
+                _ => null
+            };
+            
+            if (toggle != null)
+            {
+                toggle.IsChecked = unit.IsAvailable;
+                // Also update visual state
+                UpdateUnitVisualState(unit.Name, unit.IsAvailable);
+            }
+        }
     }
     
     private void LoadUnitImages()
@@ -167,6 +197,46 @@ public partial class SystemConfig : UserControl
         Canvas.SetTop(_hoverImage, position.Y + _imageOffset.Top);
     }
     
+    private void ProductionUnitToggle_Toggled(object sender, RoutedEventArgs e)
+    {
+        if (sender is ToggleSwitch toggleSwitch)
+        {
+            string unitName = toggleSwitch.Tag?.ToString();
+            bool isEnabled = toggleSwitch.IsChecked ?? false;
+            
+            if (!string.IsNullOrEmpty(unitName))
+            {
+                // Update the production unit availability in AssetManager
+                AssetManager.SetProdUnit(unitName, isEnabled);
+                
+                Console.WriteLine($"Production unit '{unitName}' {(isEnabled ? "enabled" : "disabled")}");
+                
+                // Optional: Add visual feedback by changing the border appearance
+                UpdateUnitVisualState(unitName, isEnabled);
+            }
+        }
+    }
+    
+    private void UpdateUnitVisualState(string unitName, bool isEnabled)
+    {
+        // Find the corresponding border element and update its visual state
+        Border border = unitName switch
+        {
+            "Gas Boiler 1" => this.FindControl<Border>("GasBoiler1Border"),
+            "Gas Boiler 2" => this.FindControl<Border>("GasBoiler2Border"),
+            "Oil Boiler 1" => this.FindControl<Border>("OilBoiler1Border"),
+            "Gas Motor 1" => this.FindControl<Border>("GasMotor1Border"),
+            "Heat Pump 1" => this.FindControl<Border>("HeatPump1Border"),
+            _ => null
+        };
+        
+        if (border != null)
+        {
+            // Change opacity to indicate disabled state
+            border.Opacity = isEnabled ? 1.0 : 0.6;
+        }
+    }
+
     private Stream GetAssetStream(string fileName)
     {
         try

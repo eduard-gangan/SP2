@@ -12,6 +12,8 @@ namespace SP2.Services
 {
     public static class AssetManager
     {
+        // Event to notify when production unit availability changes
+        public static event Action? ProductionUnitsChanged;
         private static readonly HeatGrid HeatGrid = new HeatGrid
         {
             Name = "Heatington",
@@ -41,6 +43,8 @@ namespace SP2.Services
             if (unit != null)
             {
                 unit.IsAvailable = isAvailable;
+                // Notify subscribers that production units have changed
+                ProductionUnitsChanged?.Invoke();
             }
         }
         public static HeatGrid GetHeatGrid()

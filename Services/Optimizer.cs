@@ -14,7 +14,7 @@ namespace SP2.Services
         private static readonly List<TimeSeriesData> CSVData = SourceDataManager.LoadData("Assets/2025 Heat Production Optimization - Danfoss Deliveries - Source Data Manager.csv");
         //private static readonly List<TimeSeriesData> CSVData = SourceDataManager.LoadData("/Users/davidskorepa/Desktop/ProjectWork/SP2/Assets/2025 Heat Production Optimization - Danfoss Deliveries - Source Data Manager.csv");
 
-        public static void OptimizeScenario1()
+        public static void OptimizeScenario1(bool minimizeCO2 = false)
         {
             if (ResultDataManager.GetWinterOptimizedData("Scenario1") != null && ResultDataManager.GetWinterOptimizedData("Scenario1").Any())
             {
@@ -22,8 +22,22 @@ namespace SP2.Services
                 return;
             }
 
-            List<ProductionUnit> ProductionUnits = AssetManager.GetProdUnits().Where(p => p.Name != "Gas Motor 1" || p.Name != "Heat Pump 1").ToList();
-            Console.WriteLine("\n=== Starting Scenario 1 Optimization ===");
+            List<ProductionUnit> ProductionUnits = AssetManager.GetProdUnits()
+                .Where(p => p.Name != "Gas Motor 1" && p.Name != "Heat Pump 1")
+                .Where(p => p.IsAvailable)
+                .ToList();
+            
+            // Sort units based on optimization mode
+            if (minimizeCO2)
+            {
+                ProductionUnits = ProductionUnits.OrderBy(u => u.CO2Emissions).ToList();
+                Console.WriteLine("\n=== Starting Scenario 1 Optimization (CO2 Minimization Mode) ===");
+            }
+            else
+            {
+                ProductionUnits = ProductionUnits.OrderBy(u => u.ProductionCosts).ToList();
+                Console.WriteLine("\n=== Starting Scenario 1 Optimization (Cost Minimization Mode) ===");
+            }
             
             if (CSVData == null || !CSVData.Any())
             {
@@ -51,15 +65,10 @@ namespace SP2.Services
 
                 TargetHeatDemand = data.HeatDemand;
                 int UnitIndex = 0;
-                while (TargetHeatDemand > 0)
+                while (TargetHeatDemand > 0 && UnitIndex < ProductionUnits.Count)
                 {
                     ProductionUnit productionUnit = ProductionUnits[UnitIndex];
-                    if (!productionUnit.IsAvailable)
-                    {
-                        Console.WriteLine($"Unit {productionUnit.Name} is not available.");
-                        UnitIndex++;
-                        continue;
-                    }
+                    // Unit availability is now checked during initial filtering
                     Console.WriteLine($"\nUsing unit: {productionUnit.Name}");
                     Console.WriteLine($"Unit type: {productionUnit.Type}, Fuel: {productionUnit.FuelType}");
                     Console.WriteLine($"Max heat: {productionUnit.MaxHeat} MW");
@@ -98,7 +107,18 @@ namespace SP2.Services
                     UnitIndex++;
                 }
                 
-                result.HeatProduction = data.HeatDemand;
+                // Check if we couldn't meet the heat demand with available units
+                if (TargetHeatDemand > 0)
+                {
+                    Console.WriteLine($"WARNING: Could not meet heat demand. Remaining demand: {TargetHeatDemand} MW");
+                    Console.WriteLine($"Available units: {string.Join(", ", ProductionUnits.Select(u => u.Name))}");
+                    // Set the heat production to what we could actually produce
+                    result.HeatProduction = data.HeatDemand - TargetHeatDemand;
+                }
+                else
+                {
+                    result.HeatProduction = data.HeatDemand;
+                }
                 result.Expenses = Math.Round(Expenses, 2);
                 result.GasConsumption = Math.Round(GasConsumption, 2);
                 result.OilConsumption = Math.Round(OilConsumption, 2);
@@ -132,7 +152,7 @@ namespace SP2.Services
             ResultDataManager.SaveDataToCSV(1);
         }
 
-        public static void OptimizeScenario2()
+        public static void OptimizeScenario2(bool minimizeCO2 = false)
         {
             if (ResultDataManager.GetWinterOptimizedData("Scenario2") != null && ResultDataManager.GetWinterOptimizedData("Scenario2").Any())
             {
@@ -140,11 +160,13 @@ namespace SP2.Services
                 return;
             }
 
-            List<ProductionUnit> productionUnits = AssetManager.GetProdUnits().Where(p => p.Name != "Gas Boiler 2").ToList();
+            List<ProductionUnit> productionUnits = AssetManager.GetProdUnits()
+                .Where(p => p.Name != "Gas Boiler 2")
+                .Where(p => p.IsAvailable)
+                .ToList();
             Console.WriteLine("\n=== Starting Scenario 2 Optimization ===");
             
             bool isSummer = false;
-            bool minimizeCO2 = true;
 
             Dictionary<string, double> netCosts = new Dictionary<string, double>();
 
@@ -214,11 +236,7 @@ namespace SP2.Services
                 Console.WriteLine("\nOptimizing production:");
                 foreach (var unit in sortedUnits)
                 {
-                    if (!unit.IsAvailable)
-                    {
-                        Console.WriteLine($"Unit {unit.Name} is not available.");
-                        continue;
-                    }
+                    // Unit availability is now checked during initial filtering
                     if (targetHeatDemand <= 0) break;
     
                     double heatToProduce = Math.Min(unit.MaxHeat, targetHeatDemand);
